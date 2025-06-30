@@ -1,5 +1,6 @@
 import json
 import os
+
 import shutil
 from datetime import datetime
 
@@ -27,8 +28,20 @@ class NutrientCalculatorScreen(Screen):
             self.load_data()
 
     def load_data(self):
-        with open('nutrients.json', 'r') as f:
-            full = json.load(f)
+        json_path = os.path.join(os.path.dirname(__file__), 'nutrients.json')
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                full = json.load(f)
+        except FileNotFoundError:
+            self.results_text = f'Unable to find nutrients data at {json_path}.'
+            return
+        except json.JSONDecodeError:
+            self.results_text = 'Error parsing nutrients.json.'
+            return
+        except Exception as e:
+            self.results_text = f'Error loading nutrients data: {e}'
+            return
+
         self.nutrient_data = full['nutrients']
         self.calmag_data = full['cal_mag_supplements']
         self.plant_cat_data = full.get('plant_categories', {})
@@ -54,18 +67,28 @@ class NutrientCalculatorScreen(Screen):
         stage = self.ids.stage.text
         plant_cat = self.ids.plant_category.text
         unit = self.ids.unit.text
+        # Validate selections against loaded data
+        if manu not in self.manufacturers:
+            self.results_text = 'Select a valid manufacturer.'
+            return
+        # Verify nutrient series exists for the selected manufacturer
+        nut_item = next((d for d in self.nutrient_data
+                         if d['manufacturer'] == manu and d['series'] == series), None)
+        if not nut_item:
+            self.results_text = 'Select a valid nutrient series.'
+            return
+        if stage not in nut_item['stages']:
+            self.results_text = 'Select a valid growth stage.'
+            return
+        if plant_cat not in self.plant_cat_data:
+            self.results_text = 'Select a valid plant category.'
+            return
         try:
             volume = float(self.ids.volume.text)
         except ValueError:
             self.results_text = 'Enter a valid volume.'
             return
         calmag = self.ids.calmag.text
-
-        # Find nutrient entry
-        nut_item = next((d for d in self.nutrient_data if d['manufacturer'] == manu and d['series'] == series), None)
-        if not nut_item:
-            self.results_text = 'Select a valid nutrient series.'
-            return
 
         # Compute factor based on base unit
         base = nut_item['base_unit'][unit]
