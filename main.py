@@ -1,4 +1,9 @@
 import json
+import os
+
+import shutil
+from datetime import datetime
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -25,8 +30,20 @@ class NutrientCalculatorScreen(Screen):
             self.load_data()
 
     def load_data(self):
-        with open('nutrients.json', 'r') as f:
-            full = json.load(f)
+        json_path = os.path.join(os.path.dirname(__file__), 'nutrients.json')
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                full = json.load(f)
+        except FileNotFoundError:
+            self.results_text = f'Unable to find nutrients data at {json_path}.'
+            return
+        except json.JSONDecodeError:
+            self.results_text = 'Error parsing nutrients.json.'
+            return
+        except Exception as e:
+            self.results_text = f'Error loading nutrients data: {e}'
+            return
+
         self.nutrient_data = full['nutrients']
         self.calmag_data = full['cal_mag_supplements']
         self.plant_cat_data = full.get('plant_categories', {})
@@ -52,18 +69,28 @@ class NutrientCalculatorScreen(Screen):
         stage = self.ids.stage.text
         plant_cat = self.ids.plant_category.text
         unit = self.ids.unit.text
+        # Validate selections against loaded data
+        if manu not in self.manufacturers:
+            self.results_text = 'Select a valid manufacturer.'
+            return
+        # Verify nutrient series exists for the selected manufacturer
+        nut_item = next((d for d in self.nutrient_data
+                         if d['manufacturer'] == manu and d['series'] == series), None)
+        if not nut_item:
+            self.results_text = 'Select a valid nutrient series.'
+            return
+        if stage not in nut_item['stages']:
+            self.results_text = 'Select a valid growth stage.'
+            return
+        if plant_cat not in self.plant_cat_data:
+            self.results_text = 'Select a valid plant category.'
+            return
         try:
             volume = float(self.ids.volume.text)
         except ValueError:
             self.results_text = 'Enter a valid volume.'
             return
         calmag = self.ids.calmag.text
-
-        # Find nutrient entry
-        nut_item = next((d for d in self.nutrient_data if d['manufacturer'] == manu and d['series'] == series), None)
-        if not nut_item:
-            self.results_text = 'Select a valid nutrient series.'
-            return
 
         # Compute factor based on base unit
         base = nut_item['base_unit'][unit]
@@ -92,6 +119,73 @@ class NutrientCalculatorScreen(Screen):
                 lines.append(f"Adjustment {comp['name']}: {adj}")
 
         self.results_text = '\n'.join(lines)
+
+        # Log schedule entry on success
+        if lines:
+            self.log_schedule({
+                'date': datetime.now().isoformat(),
+                'manufacturer': manu,
+                'series': series,
+                'stage': stage,
+                'plant_category': plant_cat,
+                'unit': unit,
+                'volume': volume,
+                'cal_mag': calmag,
+                'lines': lines,
+            })
+
+    def log_schedule(self, entry):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        os.makedirs(app.user_data_dir, exist_ok=True)
+        if os.path.exists(log_path):
+            try:
+                with open(log_path, 'r') as fh:
+                    data = json.load(fh)
+            except Exception:
+                data = []
+        else:
+            data = []
+        data.append(entry)
+        with open(log_path, 'w') as fh:
+            json.dump(data, fh, indent=2)
+
+
+class ScheduleLogScreen(Screen):
+    log_entries = ListProperty([])
+
+    def on_pre_enter(self):
+        self.load_log()
+
+    def load_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            try:
+                with open(log_path, 'r') as fh:
+                    data = json.load(fh)
+            except Exception:
+                data = []
+        else:
+            data = []
+        self.log_entries = [
+            f"{e['date']} - {e['plant_category']} {e['stage']} {e['volume']} {e['unit']}"
+            for e in data
+        ]
+
+    def clear_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            os.remove(log_path)
+        self.load_log()
+
+    def export_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
+            shutil.copy(log_path, export_path)
 
 class ProblemSearchScreen(Screen):
     def search(self):
@@ -160,6 +254,7 @@ ScreenManager:
     ProblemSearchScreen:
     ShelfLayoutScreen:
 
+
 <MenuScreen>:
     name: 'menu'
     BoxLayout:
@@ -176,8 +271,10 @@ ScreenManager:
             text: '🔍 Hydroponic Problem Search'
             on_release: app.sm.current = 'problem_search'
         Button:
+
             text: '\U0001F4DA Shelf Layout'
             on_release: app.sm.current = 'shelf_layout'
+
 
 <NutrientCalculatorScreen>:
     name: 'nutrient_calc'
@@ -317,6 +414,30 @@ ScreenManager:
             size_hint_y: None
             height: 40
             on_release: app.sm.current = 'menu'
+
+<ScheduleLogScreen>:
+    name: 'schedule_log'
+    BoxLayout:
+        orientation: 'vertical'
+        RecycleView:
+            id: log_list
+            viewclass: 'Label'
+            data: [{'text': e} for e in root.log_entries]
+        BoxLayout:
+            size_hint_y: None
+            height: 40
+            Button:
+                text: 'Refresh'
+                on_release: root.load_log()
+            Button:
+                text: 'Export'
+                on_release: root.export_log()
+            Button:
+                text: 'Clear'
+                on_release: root.clear_log()
+            Button:
+                text: '← Back to menu'
+                on_release: app.sm.current = 'menu'
 '''
 
 class GardenPipApp(App):
