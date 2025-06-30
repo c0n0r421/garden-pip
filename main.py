@@ -8,6 +8,8 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ListProperty, StringProperty
+from kivy.uix.scatter import Scatter
+from kivy.uix.label import Label
 
 # Screen definitions
 class MenuScreen(Screen):
@@ -190,13 +192,68 @@ class ProblemSearchScreen(Screen):
         # TODO: load and filter your hydroponic problems data here
         self.ids.problem_results.text = 'Search functionality coming soon.'
 
+
+class PlantWidget(Scatter):
+    """Draggable/resizable representation of a plant."""
+
+    def __init__(self, data, update_cb, **kwargs):
+        super().__init__(**kwargs)
+        self.data = data
+        self.update_cb = update_cb
+        self.do_rotation = False
+        self.do_scale = True
+        self.add_widget(Label(text='\U0001F331', font_size=30))
+        self.size = data.get('size', (50, 50))
+        self.pos = data.get('pos', (100, 100))
+
+    def on_touch_up(self, touch):
+        result = super().on_touch_up(touch)
+        if self.collide_point(*touch.pos):
+            self.data['pos'] = list(self.pos)
+            self.data['size'] = list(self.size)
+            self.update_cb()
+        return result
+
+
+class ShelfLayoutScreen(Screen):
+    shelves = ListProperty()
+
+    def on_pre_enter(self):
+        self.load_shelves()
+
+    def load_shelves(self):
+        try:
+            with open('shelves.json', 'r') as fh:
+                self.shelves = json.load(fh)
+        except Exception:
+            self.shelves = []
+
+        self.ids.layout.clear_widgets()
+        for plant in self.shelves:
+            self.add_plant_widget(plant)
+
+    def add_plant_widget(self, plant=None):
+        if plant is None:
+            plant = {'pos': [100, 100], 'size': [50, 50]}
+            self.shelves.append(plant)
+        widget = PlantWidget(plant, self.save_shelves)
+        self.ids.layout.add_widget(widget)
+
+    def save_shelves(self, *args):
+        with open('shelves.json', 'w') as fh:
+            json.dump(self.shelves, fh)
+
+    def on_leave(self):
+        self.save_shelves()
+
 # Kivy UI definition
 kv = '''
 ScreenManager:
     MenuScreen:
     NutrientCalculatorScreen:
     ProblemSearchScreen:
-    ScheduleLogScreen:
+    ShelfLayoutScreen:
+
 
 <MenuScreen>:
     name: 'menu'
@@ -214,8 +271,10 @@ ScreenManager:
             text: '🔍 Hydroponic Problem Search'
             on_release: app.sm.current = 'problem_search'
         Button:
-            text: '🗒️ Schedule Log'
-            on_release: app.sm.current = 'schedule_log'
+
+            text: '\U0001F4DA Shelf Layout'
+            on_release: app.sm.current = 'shelf_layout'
+
 
 <NutrientCalculatorScreen>:
     name: 'nutrient_calc'
@@ -279,6 +338,36 @@ ScreenManager:
             size_hint_y: None
             height: 40
             on_release: app.sm.current = 'menu'
+
+<ShelfLayoutScreen>:
+    name: 'shelf_layout'
+    BoxLayout:
+        orientation: 'vertical'
+        FloatLayout:
+            id: layout
+            size_hint_y: 0.9
+            canvas.before:
+                Color:
+                    rgba: 0.9, 0.9, 0.9, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 0, 0, 0, 1
+                Rectangle:
+                    pos: self.x, self.y + self.height * 0.33
+                    size: self.width, 2
+                Rectangle:
+                    pos: self.x, self.y + self.height * 0.66
+                    size: self.width, 2
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'Add Plant'
+                on_release: root.add_plant_widget()
+            Button:
+                text: '← Back to menu'
+                on_release: app.sm.current = 'menu'
 
 <ProblemSearchScreen>:
     name: 'problem_search'
