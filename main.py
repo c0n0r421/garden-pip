@@ -50,18 +50,28 @@ class NutrientCalculatorScreen(Screen):
         stage = self.ids.stage.text
         plant_cat = self.ids.plant_category.text
         unit = self.ids.unit.text
+        # Validate selections against loaded data
+        if manu not in self.manufacturers:
+            self.results_text = 'Select a valid manufacturer.'
+            return
+        # Verify nutrient series exists for the selected manufacturer
+        nut_item = next((d for d in self.nutrient_data
+                         if d['manufacturer'] == manu and d['series'] == series), None)
+        if not nut_item:
+            self.results_text = 'Select a valid nutrient series.'
+            return
+        if stage not in nut_item['stages']:
+            self.results_text = 'Select a valid growth stage.'
+            return
+        if plant_cat not in self.plant_cat_data:
+            self.results_text = 'Select a valid plant category.'
+            return
         try:
             volume = float(self.ids.volume.text)
         except ValueError:
             self.results_text = 'Enter a valid volume.'
             return
         calmag = self.ids.calmag.text
-
-        # Find nutrient entry
-        nut_item = next((d for d in self.nutrient_data if d['manufacturer'] == manu and d['series'] == series), None)
-        if not nut_item:
-            self.results_text = 'Select a valid nutrient series.'
-            return
 
         # Compute factor based on base unit
         base = nut_item['base_unit'][unit]
