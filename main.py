@@ -1,4 +1,5 @@
 import json
+import os
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -23,8 +24,20 @@ class NutrientCalculatorScreen(Screen):
             self.load_data()
 
     def load_data(self):
-        with open('nutrients.json', 'r') as f:
-            full = json.load(f)
+        json_path = os.path.join(os.path.dirname(__file__), 'nutrients.json')
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                full = json.load(f)
+        except FileNotFoundError:
+            self.results_text = f'Unable to find nutrients data at {json_path}.'
+            return
+        except json.JSONDecodeError:
+            self.results_text = 'Error parsing nutrients.json.'
+            return
+        except Exception as e:
+            self.results_text = f'Error loading nutrients data: {e}'
+            return
+
         self.nutrient_data = full['nutrients']
         self.calmag_data = full['cal_mag_supplements']
         self.plant_cat_data = full.get('plant_categories', {})
