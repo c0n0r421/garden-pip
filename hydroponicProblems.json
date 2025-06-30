@@ -1,0 +1,833 @@
+{
+  "problems": [
+    {
+      "id": "1",
+      "title": "Burnt Leaf Tips in Cucumbers",
+      "description": "Cucumber plants exhibit burnt or crispy leaf tips, often due to nutrient burn caused by excessive fertilizer concentration or high light intensity.",
+      "symptoms": [
+        "Burnt or crispy leaf tips",
+        "Brown leaf edges",
+        "Scorch marks on foliage"
+      ],
+      "possibleCauses": [
+        "Excessive nutrient concentration",
+        "High light intensity",
+        "pH imbalance affecting nutrient uptake"
+      ],
+      "solutions": [
+        "Dilute the nutrient solution",
+        "Adjust pH to the optimal range (5.5-6.5)",
+        "Provide shading or improve ventilation"
+      ],
+      "adjustmentRecommendation": "Reduce the nutrient concentration by 10-15% initially and adjust light exposure if necessary.",
+      "applicablePlants": ["Cucumber", "Generic", "Fruits"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Hydroton", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "2",
+      "title": "Curling Tomato Leaves",
+      "description": "Tomato plants exhibit curling leaf edges, which is often associated with calcium deficiency or overall nutrient imbalances.",
+      "symptoms": [
+        "Leaf edges curling upward",
+        "Brown or discolored margins",
+        "Distorted leaf shape"
+      ],
+      "possibleCauses": [
+        "Calcium deficiency",
+        "Excess salt buildup",
+        "Inconsistent watering"
+      ],
+      "solutions": [
+        "Increase calcium supplementation",
+        "Adjust nutrient ratios",
+        "Ensure proper watering and drainage"
+      ],
+      "adjustmentRecommendation": "Increase calcium supplementation by 10-15% and consider reducing salt levels if necessary.",
+      "applicablePlants": ["Tomato", "Generic", "Fruits"],
+      "growthStages": ["Vegetative", "Flowering"],
+      "growMedia": ["Rockwool", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "3",
+      "title": "Cucumber Leaves Curling Under",
+      "description": "Cucumber leaves curling under can be a sign of over-fertilization or inconsistent watering, leading to imbalanced turgor pressure.",
+      "symptoms": [
+        "Leaves curling under",
+        "Wilting",
+        "Mild discoloration"
+      ],
+      "possibleCauses": [
+        "Over-application of fertilizer",
+        "Inconsistent moisture levels",
+        "Low ambient humidity"
+      ],
+      "solutions": [
+        "Reduce fertilizer concentration",
+        "Maintain a consistent watering schedule",
+        "Increase ambient humidity"
+      ],
+      "adjustmentRecommendation": "Reduce the nutrient solution strength by 10-20% initially and stabilize the watering schedule.",
+      "applicablePlants": ["Cucumber", "Generic", "Fruits"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "4",
+      "title": "Abnormal Basil Stem Development",
+      "description": "Basil plants sometimes show abnormal stem development—such as swelling or discoloration—possibly due to fungal infection or overwatering.",
+      "symptoms": [
+        "Swollen or discolored stems",
+        "Mushy texture",
+        "Stunted growth"
+      ],
+      "possibleCauses": [
+        "Fungal infection",
+        "Overwatering",
+        "Poor air circulation"
+      ],
+      "solutions": [
+        "Improve air circulation",
+        "Reduce watering frequency",
+        "Apply a fungicide if necessary"
+      ],
+      "adjustmentRecommendation": "No specific nutrient adjustment; focus on improving environmental conditions.",
+      "applicablePlants": ["Basil", "Herbs", "Generic"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Coco Coir", "Generic", "Rockwool"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "5",
+      "title": "Yellowing Lettuce Leaves",
+      "description": "Lettuce plants may develop yellowing leaves, often due to nitrogen deficiency or waterlogging that causes oxygen-deprived roots.",
+      "symptoms": [
+        "General yellowing of leaves",
+        "Stunted growth",
+        "Premature leaf drop"
+      ],
+      "possibleCauses": [
+        "Nitrogen deficiency",
+        "Overwatering",
+        "pH imbalance affecting nutrient uptake"
+      ],
+      "solutions": [
+        "Increase nitrogen levels in the nutrient mix",
+        "Ensure proper drainage",
+        "Monitor and adjust pH levels"
+      ],
+      "adjustmentRecommendation": "Increase nitrogen levels by approximately 10% initially while improving drainage.",
+      "applicablePlants": ["Lettuce", "Leafy Greens", "Generic"],
+      "growthStages": ["Seedling", "Vegetative"],
+      "growMedia": ["Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "6",
+      "title": "Blossom End Rot in Bell Peppers",
+      "description": "Bell pepper fruits develop blossom end rot, typically caused by calcium deficiency or irregular watering.",
+      "symptoms": [
+        "Dark, sunken spots on the fruit",
+        "Fruit distortion",
+        "Premature fruit drop"
+      ],
+      "possibleCauses": [
+        "Calcium deficiency",
+        "Irregular watering",
+        "Excessive fertilizer application"
+      ],
+      "solutions": [
+        "Supplement calcium in the nutrient solution",
+        "Implement a consistent watering schedule",
+        "Adjust fertilizer concentration"
+      ],
+      "adjustmentRecommendation": "Increase calcium supplementation by 10-15% initially and standardize watering practices.",
+      "applicablePlants": ["Bell Pepper", "Generic", "Fruits"],
+      "growthStages": ["Flowering", "Fruiting"],
+      "growMedia": ["Rockwool", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "7",
+      "title": "Strawberry Leaf Scorch",
+      "description": "Strawberry plants may develop scorched leaf margins due to high light intensity combined with nutrient imbalances.",
+      "symptoms": [
+        "Scorched or brown leaf margins",
+        "Wilting",
+        "Reduced fruit quality"
+      ],
+      "possibleCauses": [
+        "Excessive light exposure",
+        "High nutrient salt concentration",
+        "pH imbalance"
+      ],
+      "solutions": [
+        "Provide partial shading",
+        "Dilute the nutrient solution",
+        "Adjust pH gradually"
+      ],
+      "adjustmentRecommendation": "Dilute the nutrient solution by about 10% initially and adjust pH in small increments.",
+      "applicablePlants": ["Strawberry", "Fruits", "Generic"],
+      "growthStages": ["Vegetative", "Fruiting"],
+      "growMedia": ["Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "8",
+      "title": "Spinach Tip Burn",
+      "description": "Spinach plants can exhibit tip burn, usually due to high salt concentration or uneven water distribution.",
+      "symptoms": [
+        "Brown or burnt tips on leaves",
+        "Crisp, dry edges",
+        "Uneven growth"
+      ],
+      "possibleCauses": [
+        "Excessive nutrient concentration",
+        "Uneven water distribution",
+        "Environmental stress"
+      ],
+      "solutions": [
+        "Adjust nutrient concentration",
+        "Ensure even water delivery",
+        "Stabilize environmental conditions"
+      ],
+      "adjustmentRecommendation": "Reduce the nutrient solution strength by 10-15% initially.",
+      "applicablePlants": ["Spinach", "Leafy Greens", "Generic"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Hydroton", "Generic", "Rockwool"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "9",
+      "title": "Yellowing Basil Leaves",
+      "description": "Basil plants may display overall yellowing of leaves, which can be due to micronutrient deficiencies or improper pH levels.",
+      "symptoms": [
+        "Uniform yellowing of foliage",
+        "Pale leaf color",
+        "Reduced growth"
+      ],
+      "possibleCauses": [
+        "Micronutrient deficiencies (e.g., iron, magnesium)",
+        "Suboptimal pH affecting uptake"
+      ],
+      "solutions": [
+        "Increase micronutrient concentrations",
+        "Adjust pH to within 5.5-6.5"
+      ],
+      "adjustmentRecommendation": "Increase micronutrients by around 10% and adjust pH gradually.",
+      "applicablePlants": ["Basil", "Herbs", "Generic"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "10",
+      "title": "Tomato Fruit Cracking",
+      "description": "Tomato fruits may develop cracks on the skin, often due to inconsistent watering and nutrient imbalances affecting cell turgor.",
+      "symptoms": [
+        "Cracked fruit skin",
+        "Uneven fruit size",
+        "Premature fruit drop"
+      ],
+      "possibleCauses": [
+        "Inconsistent watering",
+        "Nutrient imbalances"
+      ],
+      "solutions": [
+        "Establish a consistent watering schedule",
+        "Balance the nutrient solution"
+      ],
+      "adjustmentRecommendation": "Focus primarily on consistent watering; adjust nutrient ratios if imbalances persist.",
+      "applicablePlants": ["Tomato", "Generic", "Fruits"],
+      "growthStages": ["Fruiting"],
+      "growMedia": ["Rockwool", "Generic"],
+      "hydroponicSystems": ["Generic"]
+    },
+    {
+      "id": "11",
+      "title": "Root Rot in Hydroponic Lettuce",
+      "description": "Lettuce plants can develop root rot characterized by mushy, brown roots and a foul odor, usually caused by overwatering and poor oxygenation.",
+      "symptoms": [
+        "Mushy, discolored roots",
+        "Foul odor from the root zone",
+        "Stunted above-ground growth"
+      ],
+      "possibleCauses": [
+        "Overwatering",
+        "Low dissolved oxygen",
+        "Pathogenic fungal or bacterial infection"
+      ],
+      "solutions": [
+        "Improve aeration in the root zone",
+        "Reduce watering frequency",
+        "Replace contaminated water and media"
+      ],
+      "adjustmentRecommendation": "Reduce water volume by 10-15% and enhance root aeration.",
+      "applicablePlants": ["Lettuce", "Leafy Greens", "Generic"],
+      "growthStages": ["Seedling", "Vegetative"],
+      "growMedia": ["Coco Coir", "Rockwool", "Generic", "Hydroton"],
+      "hydroponicSystems": ["DWC", "NFT", "Ebb & Flow", "Generic"]
+    },
+    {
+      "id": "12",
+      "title": "Algae Growth in Nutrient Reservoir",
+      "description": "Algae buildup in the nutrient reservoir can reduce nutrient availability and serve as a breeding ground for pathogens.",
+      "symptoms": [
+        "Green or brown slimy deposits on reservoir walls",
+        "Turbid water",
+        "Unpleasant odor"
+      ],
+      "possibleCauses": [
+        "Exposure of the reservoir to light",
+        "Infrequent cleaning"
+      ],
+      "solutions": [
+        "Cover the reservoir to block light",
+        "Clean the reservoir regularly",
+        "Replace water periodically"
+      ],
+      "adjustmentRecommendation": "No nutrient adjustment is required; focus on physical remediation.",
+      "applicablePlants": ["Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["NFT", "DWC", "Drip", "Ebb & Flow", "Aeroponics", "Wick", "Generic"]
+    },
+    {
+      "id": "13",
+      "title": "Nutrient Lockout Due to pH Fluctuation",
+      "description": "Plants may show nutrient deficiency symptoms despite an adequate supply when pH levels are outside the optimal range, leading to nutrient lockout.",
+      "symptoms": [
+        "General chlorosis",
+        "Stunted growth",
+        "Poor fruit or flower development"
+      ],
+      "possibleCauses": [
+        "pH levels outside the optimal range (5.5-6.5)",
+        "Excess buildup of nutrient salts"
+      ],
+      "solutions": [
+        "Test and adjust the pH gradually using pH up or pH down solutions",
+        "Flush the system periodically to remove salts"
+      ],
+      "adjustmentRecommendation": "Adjust pH in small increments (5-10% change) and recheck after 24 hours.",
+      "applicablePlants": ["Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["NFT", "DWC", "Drip", "Ebb & Flow", "Aeroponics", "Generic"]
+    },
+    {
+      "id": "14",
+      "title": "Pest Infestation in Hydroponic Systems",
+      "description": "Pest infestations—such as aphids or whiteflies—can stress hydroponic plants and potentially transmit diseases.",
+      "symptoms": [
+        "Visible insects on leaves",
+        "Sticky residue (honeydew)",
+        "Distorted or damaged foliage"
+      ],
+      "possibleCauses": [
+        "Lack of integrated pest management",
+        "Favorable environmental conditions for pests"
+      ],
+      "solutions": [
+        "Implement biological control measures (e.g., predatory insects)",
+        "Use insecticidal soap or neem oil",
+        "Maintain a clean growing environment"
+      ],
+      "adjustmentRecommendation": "Focus on pest control strategies; nutrient adjustments are secondary.",
+      "applicablePlants": ["Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["NFT", "DWC", "Drip", "Ebb & Flow", "Aeroponics", "Generic"]
+    },
+    {
+      "id": "15",
+      "title": "Environmental Stress from Temperature/Light Extremes",
+      "description": "Extreme temperatures or excessive light intensity can cause stress in hydroponic plants, affecting nutrient uptake and overall growth.",
+      "symptoms": [
+        "Leaf scorch",
+        "Wilting",
+        "Stunted growth"
+      ],
+      "possibleCauses": [
+        "High temperatures",
+        "Excessive light intensity",
+        "Low humidity"
+      ],
+      "solutions": [
+        "Regulate ambient temperature",
+        "Provide shading or cooling systems",
+        "Increase humidity in the growing area"
+      ],
+      "adjustmentRecommendation": "If stress is nutrient-related, reduce the nutrient concentration by about 10% while addressing environmental controls.",
+      "applicablePlants": ["Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["NFT", "DWC", "Drip", "Ebb & Flow", "Aeroponics", "Wick", "Generic"]
+    },
+    {
+      "id": "16",
+      "title": "Leggy or Elongated Seedlings",
+      "description": "Seedlings or young plants become tall, thin, and spindly due to suboptimal growing conditions, often related to lighting.",
+      "symptoms": [
+        "Long, weak stems that cannot support the plant",
+        "Small or pale leaves on stretched stems",
+        "Seedlings may topple over"
+      ],
+      "possibleCauses": [
+        "Insufficient light intensity or duration",
+        "Grow light positioned too far from plants",
+        "Excessively high temperatures causing stretching"
+      ],
+      "solutions": [
+        "Increase light intensity or move light source closer",
+        "Extend the duration of light exposure if necessary",
+        "Maintain optimal temperature to prevent excessive stretching"
+      ],
+      "adjustmentRecommendation": "Focus on improving light conditions (intensity and duration) rather than nutrient adjustments.",
+      "applicablePlants": ["Leafy Greens", "Herbs", "Flowers", "Generic"],
+      "growthStages": ["Seedling"],
+      "growMedia": ["Rockwool", "Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "UGA Extension - Troubleshooting Problems in Hydroponics",
+          "url": "https://extension.uga.edu/publications/detail.html?number=C1315"
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "title": "Poor Germination or Seedling Damping-off",
+      "description": "Seeds fail to germinate well or young seedlings collapse due to fungal disease (damping-off) or unfavorable germination conditions.",
+      "symptoms": [
+        "Low or no seed sprouting",
+        "Seed coatings turning mushy or moldy",
+        "Seedlings collapsing at the base (thin, brown stem)"
+      ],
+      "possibleCauses": [
+        "Certain seeds (e.g., spinach) have naturally low germination in hydroponics",
+        "Water or medium temperature outside optimal range for germination",
+        "Overly wet conditions leading to fungal growth (damping-off)"
+      ],
+      "solutions": [
+        "Start seeds in a suitable medium or pre-germinate before transferring to hydroponics",
+        "Maintain proper temperature for germination (generally 70-80°F for many vegetables)",
+        "Ensure good air flow and avoid waterlogging seedlings; use clean water and sterilized media"
+      ],
+      "adjustmentRecommendation": "Address environmental conditions (temperature, moisture) and sanitation rather than nutrient levels.",
+      "applicablePlants": ["Spinach", "Leafy Greens", "Herbs", "Generic"],
+      "growthStages": ["Seedling"],
+      "growMedia": ["Rockwool", "Coco Coir", "Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "UGA Extension - Troubleshooting Problems in Hydroponics",
+          "url": "https://extension.uga.edu/publications/detail.html?number=C1315"
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "title": "Tip Burn in Lettuce (Calcium Deficiency)",
+      "description": "New leaves in lettuce (especially head lettuce) develop brown, dead edges due to calcium not reaching rapidly growing tissue, often under high humidity or low transpiration.",
+      "symptoms": [
+        "Brown, dead edges on new leaves (especially in head lettuce)",
+        "Scorched appearance on leaf tips or margins",
+        "Reduced head quality or marketability"
+      ],
+      "possibleCauses": [
+        "Calcium deficiency caused by low transpiration (often from high humidity)",
+        "Inadequate calcium in nutrient solution or imbalance",
+        "Rapid growth that outpaces calcium uptake"
+      ],
+      "solutions": [
+        "Increase air circulation around plants (use fans) to promote transpiration",
+        "Ensure sufficient calcium in the nutrient solution (consider adding calcium nitrate)",
+        "Maintain moderate humidity levels; avoid extremely humid, stagnant air"
+      ],
+      "adjustmentRecommendation": "Add a calcium supplement (or adjust nutrient mix) by ~10% and improve airflow; monitor new leaf development.",
+      "applicablePlants": ["Lettuce", "Leafy Greens", "Generic"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Rockwool", "Hydroton", "Generic"],
+      "hydroponicSystems": ["NFT", "DWC", "Generic"],
+      "references": [
+        {
+          "title": "UNH Extension - Hydroponics at Home (Calcium Deficiency)",
+          "url": "https://extension.unh.edu/resource/hydroponics-home"
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "title": "Interveinal Chlorosis on New Leaves (Iron Deficiency)",
+      "description": "New growth shows yellowing between the leaf veins while veins remain green, typically indicating iron deficiency or iron lockout due to high pH.",
+      "symptoms": [
+        "Yellowing (chlorosis) between veins on young leaves",
+        "Green veins with yellow leaf tissue",
+        "In severe cases, new leaves may become almost white and stunted"
+      ],
+      "possibleCauses": [
+        "Nutrient solution pH too high (iron becomes unavailable)",
+        "Insufficient iron in the nutrient formulation",
+        "Nutrient antagonism (excess of other elements hindering iron uptake)"
+      ],
+      "solutions": [
+        "Test and adjust pH to optimal range (around 5.5–6.5) for iron availability",
+        "Add a chelated iron supplement to the nutrient solution",
+        "Balance nutrient levels (avoid excessive concentrations of phosphates or other metals that compete with iron)"
+      ],
+      "adjustmentRecommendation": "Gradually lower pH and add iron chelate as needed; new growth should improve in color over 1-2 weeks.",
+      "applicablePlants": ["Leafy Greens", "Herbs", "Flowers", "Generic"],
+      "growthStages": ["Vegetative"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "Penn State Extension - Hydroponics Nutrient Deficiencies (Iron)",
+          "url": "https://extension.psu.edu/homegrown-hydroponics"
+        }
+      ]
+    },
+    {
+      "id": "20",
+      "title": "Yellowing Between Veins on Older Leaves (Magnesium Deficiency)",
+      "description": "Older, lower leaves turn yellow between veins (veins stay green), which is characteristic of magnesium deficiency in many plants.",
+      "symptoms": [
+        "Interveinal chlorosis on older or lower leaves",
+        "Green veins with yellow or pale areas between veins on affected leaves",
+        "In advanced cases, brown spots or edges on leaves; leaf drop"
+      ],
+      "possibleCauses": [
+        "Insufficient magnesium in the nutrient solution",
+        "High calcium or potassium levels causing Mg uptake antagonism",
+        "Nutrient solution pH too high, reducing magnesium availability"
+      ],
+      "solutions": [
+        "Add a magnesium supplement (e.g., magnesium sulfate/Epsom salt) to the nutrient solution",
+        "Check nutrient balance and reduce excess calcium or potassium if they are disproportionately high",
+        "Ensure pH is in the 5.5–6.5 range for optimal magnesium availability"
+      ],
+      "adjustmentRecommendation": "Increase magnesium in the solution by ~10% and monitor older leaves; adjust overall nutrient balance if necessary.",
+      "applicablePlants": ["Tomato", "Bell Pepper", "Cucumber", "Fruits", "Generic"],
+      "growthStages": ["Vegetative", "Flowering"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "Penn State Extension - Hydroponics Nutrient Deficiencies (Magnesium)",
+          "url": "https://extension.psu.edu/homegrown-hydroponics"
+        }
+      ]
+    },
+    {
+      "id": "21",
+      "title": "Brown or Burnt Leaf Edges on Older Leaves (Potassium Deficiency)",
+      "description": "Older leaves develop yellowing and browning along the edges (margins), sometimes with spots, typically due to a lack of potassium.",
+      "symptoms": [
+        "Yellowing or bronzing along the leaf margins of older leaves",
+        "Leaf edges turning brown and crispy (marginal scorch)",
+        "Possible dark spotting on leaves; overall plant may be weak or lanky"
+      ],
+      "possibleCauses": [
+        "Insufficient potassium levels in the nutrient solution",
+        "Excessive calcium, sodium, or ammonium in solution competing with potassium uptake",
+        "Using water with high sodium content leading to potassium uptake issues"
+      ],
+      "solutions": [
+        "Increase the potassium concentration in the nutrient mix (or use a bloom formula higher in K)",
+        "Ensure a balanced nutrient ratio and avoid over-supplying calcium or other antagonistic nutrients",
+        "Use a quality water source or install filters to reduce sodium and other impurities"
+      ],
+      "adjustmentRecommendation": "Boost potassium by ~10-15% in the solution and remove severely damaged leaves; monitor new growth for improved coloration and strength.",
+      "applicablePlants": ["Tomato", "Cucumber", "Bell Pepper", "Strawberry", "Fruits", "Generic"],
+      "growthStages": ["Vegetative", "Flowering", "Fruiting"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "Western Michigan University - Hydroponic Nutrient Deficiency Guide (Potassium)",
+          "url": "https://files.wmich.edu/attachments/u5694/2024/Plant_Nutrient_Deficiency.pdf"
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "title": "Stunted Growth with Purpling Leaves (Phosphorus Deficiency)",
+      "description": "Plants exhibit slow, stunted growth and may show a purple tint on older leaves or stems, especially under cold conditions, indicating a possible phosphorus deficiency.",
+      "symptoms": [
+        "Slow, stunted overall growth",
+        "Older leaves dark green or purplish in color (especially underside of leaves or veins)",
+        "Delayed or sparse flowering and fruiting"
+      ],
+      "possibleCauses": [
+        "Insufficient phosphorus in the nutrient solution",
+        "Cool temperatures reducing phosphorus uptake",
+        "Nutrient imbalance (excessive iron/zinc can precipitate phosphorus or otherwise interfere)"
+      ],
+      "solutions": [
+        "Increase phosphorus content in the nutrient solution (consider a bloom booster higher in P)",
+        "Keep air and solution temperature in optimal range (around 65–75°F) to enhance uptake",
+        "Avoid oversupplying micronutrients that can bind with phosphorus; use fully soluble nutrient sources"
+      ],
+      "adjustmentRecommendation": "Raise phosphorus levels by ~15% and ensure proper temperature; look for improved growth and less purpling on new growth over a couple of weeks.",
+      "applicablePlants": ["Tomato", "Bell Pepper", "Flowers", "Fruits", "Generic"],
+      "growthStages": ["Vegetative", "Flowering"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "Western Michigan University - Hydroponic Nutrient Deficiency Guide (Phosphorus)",
+          "url": "https://files.wmich.edu/attachments/u5694/2024/Plant_Nutrient_Deficiency.pdf"
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "title": "White Powdery Patches on Leaves (Powdery Mildew)",
+      "description": "Fuzzy white patches appear on leaf surfaces due to powdery mildew infection, common in conditions of high humidity and poor air circulation.",
+      "symptoms": [
+        "White, powdery fungal growth on leaves or stems",
+        "Affected leaves may turn yellow or brown and distort",
+        "Fungal patches can spread to cover large portions of foliage"
+      ],
+      "possibleCauses": [
+        "High humidity and stale air (poor ventilation) around plants",
+        "Overcrowding of plants leading to limited airflow",
+        "Spores introduced from other infected plants or outdoors"
+      ],
+      "solutions": [
+        "Remove and destroy affected leaves to reduce spore spread",
+        "Improve air circulation (use fans, space plants apart) and reduce humidity",
+        "Apply a safe fungicide or remedy (like potassium bicarbonate, neem oil, or labeled fungicide) at first sign of mildew"
+      ],
+      "adjustmentRecommendation": "No nutrient changes needed; focus on lowering humidity and treating plants with antifungal measures.",
+      "applicablePlants": ["Cucumber", "Basil", "Herbs", "Flowers", "Generic"],
+      "growthStages": ["Vegetative", "Flowering"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "University of Maryland Extension - Powdery Mildew on Indoor Plants",
+          "url": "https://extension.umd.edu/resource/powdery-mildew-indoor-plants"
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "title": "Gray Fuzzy Mold on Plants (Botrytis/Gray Mold)",
+      "description": "A gray, fuzzy mold grows on leaves, stems, or fruits (especially decaying or old tissue), typically caused by Botrytis cinerea in cool, humid conditions.",
+      "symptoms": [
+        "Gray-brown fuzzy mold on affected areas of plants (flowers, fruits, or damaged leaves)",
+        "Water-soaked spots on leaves or petals that turn brown",
+        "Flowers or fruits may rot and develop gray mold"
+      ],
+      "possibleCauses": [
+        "Cool temperatures combined with high humidity, creating ideal conditions for Botrytis",
+        "Poor air circulation and presence of decaying plant material",
+        "Overcrowding of plants or any situation that keeps foliage wet for extended periods"
+      ],
+      "solutions": [
+        "Prune out and dispose of infected tissues immediately (don't compost indoors)",
+        "Increase air flow and reduce humidity in the growing area",
+        "Apply an appropriate fungicide if the outbreak is severe, to protect healthy tissue",
+        "Keep the growing area clean of dead leaves or debris where the fungus can harbor"
+      ],
+      "adjustmentRecommendation": "Focus on environmental controls (temperature, humidity) and hygiene; nutrient adjustments are not effective against this issue.",
+      "applicablePlants": ["Strawberry", "Lettuce", "Flowers", "Generic"],
+      "growthStages": ["Flowering", "Fruiting"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "Penn State Extension - Strawberry Gray Mold (Botrytis) Conditions",
+          "url": "https://extension.psu.edu/strawberry-disease-gray-mold"
+        }
+      ]
+    },
+    {
+      "id": "25",
+      "title": "Root Drying in NFT Channels",
+      "description": "Plants in a Nutrient Film Technique system begin to wilt or burn because their roots are not receiving enough water flow, causing them to dry out.",
+      "symptoms": [
+        "Wilting or drooping plants, particularly far from the nutrient inlet",
+        "Dry, brittle roots in the NFT channels (white roots turning brown)",
+        "Leaf tips or edges may become crispy if dehydration continues"
+      ],
+      "possibleCauses": [
+        "Interruption in nutrient flow (pump failure or power outage)",
+        "Nutrient solution film too shallow or uneven, not reaching all roots",
+        "Roots overgrown and clogging the channel, causing overflow or uneven distribution"
+      ],
+      "solutions": [
+        "Immediately restore flow by fixing the pump or power supply",
+        "Ensure channels are properly sloped and unobstructed for even nutrient film distribution",
+        "Trim excessive roots and consider using larger channels or multiple channels to prevent blockage",
+        "Implement monitoring or alarms for pump function to catch failures early"
+      ],
+      "adjustmentRecommendation": "Focus on mechanical fixes (restore flow); consider slightly reducing nutrient concentration temporarily if roots were damaged, to ease recovery.",
+      "applicablePlants": ["Lettuce", "Herbs", "Strawberry", "Generic", "Leafy Greens"],
+      "growthStages": ["All"],
+      "growMedia": ["Rockwool", "Hydroton", "Generic"],
+      "hydroponicSystems": ["NFT"],
+      "references": [
+        {
+          "title": "Science in Hydroponics - NFT System Fragility (Flow Failures)",
+          "url": "https://scienceinhydroponics.com/2021/04/why-nft-is-the-best-hydroponic-system-beginners-should-avoid.html"
+        }
+      ]
+    },
+    {
+      "id": "26",
+      "title": "Wilting in Aeroponics (Clogged Nozzles or Pump Failure)",
+      "description": "Plants in an aeroponic system wilt rapidly due to the nutrient mist supply being disrupted, often from clogged spray nozzles, pump failure, or timer issues.",
+      "symptoms": [
+        "Sudden and severe wilting of plants across the system",
+        "Roots appearing dry and lacking the usual moisture",
+        "Leaf edges may become dry and curled if not addressed quickly"
+      ],
+      "possibleCauses": [
+        "Clogged misting nozzles (mineral deposits or debris blocking them)",
+        "Pump failure or power outage halting the misting cycle",
+        "Timer or control malfunction leading to infrequent or missed misting intervals"
+      ],
+      "solutions": [
+        "Unclog or replace blocked nozzles and use filters in the nutrient solution to prevent clogs",
+        "Restore pump operation or replace a failed pump; consider a backup pump in critical systems",
+        "Ensure the misting timer is functioning correctly and set to spray at appropriate intervals",
+        "Regularly maintain and clean the system to prevent future clogs (e.g., flush with clean water)"
+      ],
+      "adjustmentRecommendation": "No nutrient concentration change needed; resume normal misting schedule and reduce plant stress (e.g., temporarily lower light intensity) until recovery.",
+      "applicablePlants": ["Leafy Greens", "Herbs", "Flowers", "Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Aeroponics"],
+      "references": [
+        {
+          "title": "Hypno Seeds - Common Aeroponics Problems (Nozzle Clogging)",
+          "url": "https://hypnoseeds.com/aeroponics-problems-and-solutions-navigating-challenges-for-thriving-root-systems-and-efficient-setups/"
+        }
+      ]
+    },
+    {
+      "id": "27",
+      "title": "Uneven Watering in Drip System (Clogged Emitters)",
+      "description": "Some plants in a drip-irrigated hydroponic setup wilt or show nutrient deficiencies due to clogged emitters or uneven distribution of the nutrient solution.",
+      "symptoms": [
+        "One or more plants wilting despite others being fine in the same system",
+        "Dry growing medium in pots of affected plants",
+        "Nutrient deficiency-like symptoms (yellowing, stunting) in some plants despite overall system feeding"
+      ],
+      "possibleCauses": [
+        "Mineral buildup or debris clogging the drip emitters",
+        "Insufficient pump pressure or tubing kinks leading to uneven flow",
+        "Algae or biofilm growth blocking tubing or emitters over time"
+      ],
+      "solutions": [
+        "Inspect and clean or replace clogged emitters; flush lines regularly",
+        "Use a filter on the nutrient reservoir output to catch particles before they reach emitters",
+        "Periodically run a cleaning solution (like dilute hydrogen peroxide or vinegar) through the system to dissolve mineral deposits",
+        "Maintain proper pump pressure and consider using pressure-compensating emitters for even flow"
+      ],
+      "adjustmentRecommendation": "Restore even watering; after fixing, monitor the previously dry plants as they rehydrate (avoid overcompensating with excessive nutrients immediately).",
+      "applicablePlants": ["Tomato", "Cucumber", "Flowers", "Generic", "Fruits"],
+      "growthStages": ["All"],
+      "growMedia": ["Rockwool", "Coco Coir", "Hydroton", "Generic"],
+      "hydroponicSystems": ["Drip"],
+      "references": []
+    },
+    {
+      "id": "28",
+      "title": "Improper Flood/Drain Timing in Ebb & Flow",
+      "description": "Plants in an ebb & flow system experience stress due to the flood cycles being too infrequent (causing dryness) or too frequent (causing waterlogging).",
+      "symptoms": [
+        "Wilting between flood cycles if medium dries out too much",
+        "Yellowing or root rot symptoms if medium stays overly wet",
+        "Inconsistent growth across the grow bed"
+      ],
+      "possibleCauses": [
+        "Flood cycles scheduled too far apart, leading to periods of drought for roots",
+        "Flood duration too long or cycles too frequent, suffocating roots",
+        "Malfunctioning timer or pump causing irregular flood/drain patterns"
+      ],
+      "solutions": [
+        "Adjust timer to flood more frequently or for longer if plants were drying out (ensure medium stays moist but not bone dry between cycles)",
+        "If roots were waterlogged, reduce flood frequency or duration to allow more oxygen to reach roots",
+        "Ensure the pump and timer are functioning correctly and consistently",
+        "Observe plant and medium moisture and fine-tune the schedule as needed for that specific crop and medium"
+      ],
+      "adjustmentRecommendation": "Modify the flood/drain schedule rather than nutrient levels; ensure each cycle properly balances water and oxygen for roots.",
+      "applicablePlants": ["Leafy Greens", "Fruits", "Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Rockwool", "Hydroton", "Coco Coir", "Generic"],
+      "hydroponicSystems": ["Ebb & Flow"],
+      "references": []
+    },
+    {
+      "id": "29",
+      "title": "Excess Foliage, No Flowers or Fruits",
+      "description": "Plants are healthy and green but produce few or no flowers and fruits, often due to an excess of nitrogen or imbalanced nutrients favoring vegetative growth over reproductive growth.",
+      "symptoms": [
+        "Very lush, dark green plant growth",
+        "Few or no flower buds forming when expected",
+        "Flowers that do form may drop off (no fruit set)"
+      ],
+      "possibleCauses": [
+        "Nutrient formula too high in nitrogen and too low in phosphorus/potassium for the flowering stage",
+        "Overall EC might be too high, promoting vegetative growth",
+        "Inadequate light quality or photoperiod for flowering (if using artificial lighting)"
+      ],
+      "solutions": [
+        "Switch to a \"bloom\" nutrient formula with lower nitrogen and higher P/K as flowering time approaches",
+        "Slightly reduce overall feeding strength to encourage the plant to shift to reproductive mode",
+        "Make sure the plant is getting appropriate light (intensity and photoperiod) for flowering"
+      ],
+      "adjustmentRecommendation": "Gradually decrease nitrogen by ~20% and increase phosphorus/potassium; monitor over the next 1-2 weeks for initiation of flowering.",
+      "applicablePlants": ["Tomato", "Bell Pepper", "Cucumber", "Flowers", "Fruits", "Generic"],
+      "growthStages": ["Flowering"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "UGA Extension - Troubleshooting Problems in Hydroponics",
+          "url": "https://extension.uga.edu/publications/detail.html?number=C1315"
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "title": "Cold Stress (Low Temperature Issues)",
+      "description": "Plants exposed to temperatures below their optimal range exhibit slow growth and sometimes develop unusual coloration (such as purpling) or other stress symptoms.",
+      "symptoms": [
+        "Slowed growth rate or temporarily halted growth",
+        "Older leaves may develop purple tints (especially underside) or stay darker green",
+        "Leaves might appear limp or curling in severe chill",
+        "Delayed flowering or fruiting in crops that should be blooming"
+      ],
+      "possibleCauses": [
+        "Air temperatures dropping too low for the plant variety (e.g., below 60°F for warm-season crops)",
+        "Cold nutrient solution temperature, which can slow nutrient uptake",
+        "Exposure to cold drafts or nights much cooler than days"
+      ],
+      "solutions": [
+        "Keep air temperature in the recommended range (use heaters if necessary during cold periods)",
+        "Maintain nutrient solution temperature around 65-70°F using aquarium heaters or insulation if needed",
+        "Avoid placing systems on cold floors or near sources of cold drafts; insulate tanks and grow beds",
+        "Gradually rewarm plants that have been exposed to cold to avoid shock"
+      ],
+      "adjustmentRecommendation": "Focus on raising temperatures to optimal range; ensure adequate phosphorus if purpling occurred due to cold (as a secondary measure).",
+      "applicablePlants": ["Basil", "Tomato", "Cucumber", "Flowers", "Generic"],
+      "growthStages": ["All"],
+      "growMedia": ["Generic"],
+      "hydroponicSystems": ["Generic"],
+      "references": [
+        {
+          "title": "UGA Extension - Troubleshooting Problems in Hydroponics",
+          "url": "https://extension.uga.edu/publications/detail.html?number=C1315"
+        }
+      ]
+    }
+  ]
+}

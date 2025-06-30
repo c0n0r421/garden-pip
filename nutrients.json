@@ -1,0 +1,625 @@
+{
+  "nutrients": [
+    {
+      "manufacturer": "General Hydroponics",
+      "series": "Flora Series",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 33, "imperial": 0.25 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 33, "imperial": 0.25 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 33, "imperial": 0.25 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 132, "imperial": 1 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 264, "imperial": 2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 132, "imperial": 1 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 198, "imperial": 1.5 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 132, "imperial": 1 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 264, "imperial": 2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 211, "imperial": 1.6 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 422, "imperial": 3.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    },
+    {
+      "manufacturer": "Advanced Nutrients",
+      "series": "pH Perfect",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 20, "imperial": 0.15 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 20, "imperial": 0.15 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 20, "imperial": 0.15 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 80, "imperial": 0.65 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 120, "imperial": 0.95 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 80, "imperial": 0.65 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 120, "imperial": 0.95 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 80, "imperial": 0.65 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 120, "imperial": 0.95 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 140, "imperial": 1.1 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 280, "imperial": 2.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    },
+    {
+      "manufacturer": "FoxFarm",
+      "series": "Trio",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 25, "imperial": 0.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 25, "imperial": 0.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 25, "imperial": 0.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 100, "imperial": 0.8 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 200, "imperial": 1.6 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 100, "imperial": 0.8 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 150, "imperial": 1.2 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 100, "imperial": 0.8 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 200, "imperial": 1.6 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 160, "imperial": 1.3 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 320, "imperial": 2.6 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    },
+    {
+      "manufacturer": "Canna",
+      "series": "Aqua Series",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 30, "imperial": 0.23 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 30, "imperial": 0.23 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 30, "imperial": 0.23 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 120, "imperial": 0.92 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 240, "imperial": 1.85 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 120, "imperial": 0.92 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 180, "imperial": 1.38 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 120, "imperial": 0.92 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 240, "imperial": 1.85 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 200, "imperial": 1.54 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 400, "imperial": 3.08 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    },
+    {
+      "manufacturer": "Botanicare",
+      "series": "Pure Blend Pro",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 28, "imperial": 0.22 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 28, "imperial": 0.22 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 28, "imperial": 0.22 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 110, "imperial": 0.85 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 220, "imperial": 1.7 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 110, "imperial": 0.85 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 165, "imperial": 1.28 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 110, "imperial": 0.85 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 220, "imperial": 1.7 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 175, "imperial": 1.35 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 350, "imperial": 2.7 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    },
+    {
+      "manufacturer": "Cannabis Nutrient Institute",
+      "series": "Consensus Research",
+      "base_unit": {
+        "metric": { "volume": 100, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "stages": {
+        "Seedling": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 18, "imperial": 0.14 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 18, "imperial": 0.14 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 18, "imperial": 0.14 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Mid Vegetative": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 70, "imperial": 0.57 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 110, "imperial": 0.87 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 70, "imperial": 0.57 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Transition to Bloom": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 110, "imperial": 0.87 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 70, "imperial": 0.57 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 110, "imperial": 0.87 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ],
+        "Flowering": [
+          {
+            "name": "Micro",
+            "concentration": { "metric": 130, "imperial": 1.02 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Grow",
+            "concentration": { "metric": 0, "imperial": 0 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          },
+          {
+            "name": "Bloom",
+            "concentration": { "metric": 260, "imperial": 2.04 },
+            "unit": { "metric": "ml", "imperial": "tsp" }
+          }
+        ]
+      }
+    }
+  ],
+  "cal_mag_supplements": [
+    {
+      "manufacturer": "Botanicare",
+      "product": "Cal-Mag Plus",
+      "base_unit": {
+        "metric": { "volume": 4, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "concentration": { "metric": 4, "imperial": 5 },
+      "unit": "ml"
+    },
+    {
+      "manufacturer": "General Hydroponics",
+      "product": "CaliMagic",
+      "base_unit": {
+        "metric": { "volume": 4, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "concentration": { "metric": 3, "imperial": 4 },
+      "unit": "ml"
+    },
+    {
+      "manufacturer": "Advanced Nutrients",
+      "product": "Cal-Mag Xtra",
+      "base_unit": {
+        "metric": { "volume": 4, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "concentration": { "metric": 3.5, "imperial": 4.5 },
+      "unit": "ml"
+    },
+    {
+      "manufacturer": "FoxFarm",
+      "product": "Grow Big Cal-Mag",
+      "base_unit": {
+        "metric": { "volume": 4, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "concentration": { "metric": 4.2, "imperial": 5.2 },
+      "unit": "ml"
+    },
+    {
+      "manufacturer": "Canna",
+      "product": "Canna Aqua Vega Cal-Mag",
+      "base_unit": {
+        "metric": { "volume": 4, "unit": "liter" },
+        "imperial": { "volume": 1, "unit": "gallon" }
+      },
+      "concentration": { "metric": 3.8, "imperial": 4.8 },
+      "unit": "ml"
+    }
+  ],
+  "plant_categories": {
+    "Tomatoes": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Grow": 5,
+          "Bloom": 5
+        },
+        "Mid Vegetative": {
+          "Grow": 10,
+          "Bloom": 15
+        },
+        "Flowering": {
+          "Bloom": 10
+        }
+      }
+    },
+    "Cucumbers": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Micro": 5,
+          "Grow": 5
+        },
+        "Mid Vegetative": {
+          "Micro": 5,
+          "Grow": 5,
+          "Bloom": 5
+        },
+        "Flowering": {
+          "Bloom": 5
+        }
+      }
+    },
+    "Herbs": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Micro": -10,
+          "Grow": -10,
+          "Bloom": -10
+        },
+        "Mid Vegetative": {
+          "Micro": -5,
+          "Grow": -5,
+          "Bloom": -5
+        },
+        "Flowering": {
+          "Bloom": -5
+        }
+      }
+    },
+    "Peppers": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Grow": 5,
+          "Bloom": 5
+        },
+        "Mid Vegetative": {
+          "Grow": 8,
+          "Bloom": 12
+        },
+        "Flowering": {
+          "Bloom": 8
+        }
+      }
+    },
+    "Leafy Greens": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Micro": -5,
+          "Grow": -5,
+          "Bloom": -5
+        },
+        "Mid Vegetative": {
+          "Micro": -5,
+          "Grow": -5,
+          "Bloom": -5
+        },
+        "Flowering": {
+          "Bloom": -5
+        }
+      }
+    },
+    "Cannabis": {
+      "recommended_adjustments": {
+        "Seedling": {
+          "Micro": -5,
+          "Grow": -5,
+          "Bloom": -5
+        },
+        "Mid Vegetative": {
+          "Micro": 0,
+          "Grow": -5,
+          "Bloom": 0
+        },
+        "Flowering": {
+          "Micro": 0,
+          "Grow": 0,
+          "Bloom": -5
+        }
+      }
+    }
+  }
+}
