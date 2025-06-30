@@ -1,4 +1,8 @@
 import json
+import os
+import shutil
+from datetime import datetime
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -91,6 +95,73 @@ class NutrientCalculatorScreen(Screen):
 
         self.results_text = '\n'.join(lines)
 
+        # Log schedule entry on success
+        if lines:
+            self.log_schedule({
+                'date': datetime.now().isoformat(),
+                'manufacturer': manu,
+                'series': series,
+                'stage': stage,
+                'plant_category': plant_cat,
+                'unit': unit,
+                'volume': volume,
+                'cal_mag': calmag,
+                'lines': lines,
+            })
+
+    def log_schedule(self, entry):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        os.makedirs(app.user_data_dir, exist_ok=True)
+        if os.path.exists(log_path):
+            try:
+                with open(log_path, 'r') as fh:
+                    data = json.load(fh)
+            except Exception:
+                data = []
+        else:
+            data = []
+        data.append(entry)
+        with open(log_path, 'w') as fh:
+            json.dump(data, fh, indent=2)
+
+
+class ScheduleLogScreen(Screen):
+    log_entries = ListProperty([])
+
+    def on_pre_enter(self):
+        self.load_log()
+
+    def load_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            try:
+                with open(log_path, 'r') as fh:
+                    data = json.load(fh)
+            except Exception:
+                data = []
+        else:
+            data = []
+        self.log_entries = [
+            f"{e['date']} - {e['plant_category']} {e['stage']} {e['volume']} {e['unit']}"
+            for e in data
+        ]
+
+    def clear_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            os.remove(log_path)
+        self.load_log()
+
+    def export_log(self):
+        app = App.get_running_app()
+        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        if os.path.exists(log_path):
+            export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
+            shutil.copy(log_path, export_path)
+
 class ProblemSearchScreen(Screen):
     def search(self):
         # TODO: load and filter your hydroponic problems data here
@@ -102,6 +173,7 @@ ScreenManager:
     MenuScreen:
     NutrientCalculatorScreen:
     ProblemSearchScreen:
+    ScheduleLogScreen:
 
 <MenuScreen>:
     name: 'menu'
@@ -118,6 +190,9 @@ ScreenManager:
         Button:
             text: '🔍 Hydroponic Problem Search'
             on_release: app.sm.current = 'problem_search'
+        Button:
+            text: '🗒️ Schedule Log'
+            on_release: app.sm.current = 'schedule_log'
 
 <NutrientCalculatorScreen>:
     name: 'nutrient_calc'
@@ -227,6 +302,30 @@ ScreenManager:
             size_hint_y: None
             height: 40
             on_release: app.sm.current = 'menu'
+
+<ScheduleLogScreen>:
+    name: 'schedule_log'
+    BoxLayout:
+        orientation: 'vertical'
+        RecycleView:
+            id: log_list
+            viewclass: 'Label'
+            data: [{'text': e} for e in root.log_entries]
+        BoxLayout:
+            size_hint_y: None
+            height: 40
+            Button:
+                text: 'Refresh'
+                on_release: root.load_log()
+            Button:
+                text: 'Export'
+                on_release: root.export_log()
+            Button:
+                text: 'Clear'
+                on_release: root.clear_log()
+            Button:
+                text: '← Back to menu'
+                on_release: app.sm.current = 'menu'
 '''
 
 class GardenPipApp(App):
