@@ -5,7 +5,7 @@ import shutil
 from datetime import datetime
 
 from kivymd.app import MDApp
-from kivymd.uix.menu import MDDropDownMenu
+from kivymd.uix.menu import MDDropdownMenu
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ListProperty, StringProperty, BooleanProperty
@@ -134,7 +134,7 @@ class NutrientCalculatorScreen(Screen):
             }
             for item in items
         ]
-        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
     def _set_item(self, caller, text_item, callback):
@@ -354,7 +354,7 @@ class ProblemSearchScreen(Screen):
             }
             for item in items
         ]
-        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
     def _set_item(self, caller, text_item):
