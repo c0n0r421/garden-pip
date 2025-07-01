@@ -8,7 +8,7 @@ ScreenManager:
     name: 'menu'
     MDBoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+        MDTopAppBar:
             title: 'Garden Pip'
             elevation: 10
         MDBoxLayout:
@@ -33,7 +33,7 @@ ScreenManager:
     name: 'nutrient_calc'
     MDBoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+        MDTopAppBar:
             title: 'Nutrient Calculator'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
@@ -87,7 +87,7 @@ ScreenManager:
     name: 'shelf_layout'
     MDBoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+        MDTopAppBar:
             title: 'Shelf Layout'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
@@ -118,7 +118,7 @@ ScreenManager:
     name: 'problem_search'
     MDBoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+        MDTopAppBar:
             title: 'Problem Search'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
@@ -163,7 +163,7 @@ ScreenManager:
     name: 'schedule_log'
     MDBoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+        MDTopAppBar:
             title: 'Schedule Log'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
