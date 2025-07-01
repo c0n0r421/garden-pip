@@ -35,7 +35,7 @@ ScreenManager:
         orientation: 'vertical'
         MDToolbar:
             title: 'Nutrient Calculator'
-            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
         ScrollView:
             MDGridLayout:
@@ -89,7 +89,7 @@ ScreenManager:
         orientation: 'vertical'
         MDToolbar:
             title: 'Shelf Layout'
-            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
         FloatLayout:
             id: layout
@@ -120,7 +120,7 @@ ScreenManager:
         orientation: 'vertical'
         MDToolbar:
             title: 'Problem Search'
-            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
         ScrollView:
             MDGridLayout:
@@ -165,7 +165,7 @@ ScreenManager:
         orientation: 'vertical'
         MDToolbar:
             title: 'Schedule Log'
-            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
             elevation: 10
         MDLabel:
             id: log_status
