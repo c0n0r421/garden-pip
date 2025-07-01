@@ -199,8 +199,10 @@ class NutrientCalculatorScreen(Screen):
 
     def log_schedule(self, entry):
         app = MDApp.get_running_app()
-        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
-        os.makedirs(app.user_data_dir, exist_ok=True)
+        base_dir = getattr(app, 'user_data_dir',
+                           os.path.join(os.path.dirname(__file__), 'data'))
+        os.makedirs(base_dir, exist_ok=True)
+        log_path = os.path.join(base_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
@@ -234,7 +236,10 @@ class ScheduleLogScreen(Screen):
 
     def load_log(self):
         app = MDApp.get_running_app()
-        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        base_dir = getattr(app, 'user_data_dir',
+                           os.path.join(os.path.dirname(__file__), 'data'))
+        os.makedirs(base_dir, exist_ok=True)
+        log_path = os.path.join(base_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
@@ -255,7 +260,10 @@ class ScheduleLogScreen(Screen):
 
     def clear_log(self):
         app = MDApp.get_running_app()
-        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        base_dir = getattr(app, 'user_data_dir',
+                           os.path.join(os.path.dirname(__file__), 'data'))
+        os.makedirs(base_dir, exist_ok=True)
+        log_path = os.path.join(base_dir, 'schedule_log.json')
         try:
             if os.path.exists(log_path):
                 os.remove(log_path)
@@ -268,9 +276,12 @@ class ScheduleLogScreen(Screen):
 
     def export_log(self):
         app = MDApp.get_running_app()
-        log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
+        base_dir = getattr(app, 'user_data_dir',
+                           os.path.join(os.path.dirname(__file__), 'data'))
+        os.makedirs(base_dir, exist_ok=True)
+        log_path = os.path.join(base_dir, 'schedule_log.json')
         if os.path.exists(log_path):
-            export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
+            export_path = os.path.join(base_dir, 'schedule_log_export.json')
             try:
                 shutil.copy(log_path, export_path)
             except OSError as e:
