@@ -149,10 +149,21 @@ class NutrientCalculatorScreen(Screen):
         factor = volume / base['volume']
 
         lines = []
-        # Calculate each component
+        # Plant category adjustments
+        cat_adj = self.plant_cat_data.get(plant_cat, {}).get('recommended_adjustments', {})
+        stage_adj = cat_adj.get(stage, {})
+
+        # Calculate each component with adjustment applied
         for comp in nut_item['stages'][stage]:
-            amt = comp['concentration'][unit] * factor
-            lines.append(f"{comp['name']}: {amt:.2f} {comp['unit'][unit]}")
+            base_amt = comp['concentration'][unit] * factor
+            adj = stage_adj.get(comp['name'], 0)
+            amt = base_amt + adj
+            if adj:
+                lines.append(
+                    f"{comp['name']}: {amt:.2f} {comp['unit'][unit]} (adjusted {adj})"
+                )
+            else:
+                lines.append(f"{comp['name']}: {amt:.2f} {comp['unit'][unit]}")
 
         # Cal-Mag supplement
         cal_item = next((c for c in self.calmag_data if c['product'] == calmag), None)
@@ -161,14 +172,6 @@ class NutrientCalculatorScreen(Screen):
             factor2 = volume / base2['volume']
             cal_amt = cal_item['concentration'][unit] * factor2
             lines.append(f"{cal_item['product']}: {cal_amt:.2f} {cal_item['unit']}")
-
-        # Plant category adjustments
-        cat_adj = self.plant_cat_data.get(plant_cat, {}).get('recommended_adjustments', {})
-        stage_adj = cat_adj.get(stage, {})
-        for comp in nut_item['stages'][stage]:
-            adj = stage_adj.get(comp['name'], 0)
-            if adj:
-                lines.append(f"Adjustment {comp['name']}: {adj}")
 
         self.results_text = '\n'.join(lines)
 
