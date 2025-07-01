@@ -28,12 +28,24 @@ The application opens a simple GUI window where the tools are accessible.
 ## Features
 
 - **Nutrient calculator** – Calculate nutrient amounts based on manufacturer, series, growth stage, plant category, units, volume, and Cal-Mag supplement.  Results appear in the interface.
-- **Problem search** – A placeholder screen intended to search issues in hydroponic systems.  Data is stored in `hydroponicProblems.json` and will be searchable in upcoming versions.
+- **Problem search** – *Experimental* placeholder screen for diagnosing issues.  Data is stored in `hydroponicProblems.json` but searching is incomplete.
 - **Shelf layout** – *(Planned)* a tool for configuring the physical arrangement of plants on shelving units.
-- **Schedule log** – *(Planned)* a log of tasks such as feeding or cleaning events to help track plant care.
+- **Schedule log** – *Experimental* feature that records nutrient calculations; the log viewer is still under development.
 
 ## Data files
 
 - `nutrients.json` – Defines nutrient concentrations for various manufacturers, series and growth stages.
 - `hydroponicProblems.json` – Contains example problems, symptoms and solutions for diagnosing issues in a hydroponic setup.
+
+## Using the nutrient calculator
+
+1. From the menu choose **Nutrient Calculator**.
+2. Select the nutrient manufacturer, series and growth stage.
+3. Pick a plant category and unit system, then enter the desired solution volume.
+4. Optionally choose a Cal-Mag supplement and press **Calculate**.
+5. The calculated amounts appear below the button and the entry is added to the schedule log.
+
+## Log files
+
+Schedule entries are written to `schedule_log.json` inside Kivy's user data directory (typically `~/.local/share/gardenpip/` on Linux).  The schedule log screen lets you view, export or clear this file.  Logging is experimental and may change in future versions.
 
