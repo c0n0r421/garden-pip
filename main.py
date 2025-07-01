@@ -21,6 +21,10 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.resources import resource_find
 
+from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
+from gardenpip.problem_logic import load_problem_data, search_problems
+from gardenpip.shelf_logic import load_shelves, save_shelves
+
 # Simple helper for displaying error popups
 def show_error_popup(title, message):
     Popup(
@@ -38,24 +42,12 @@ def load_hydroponic_problems():
         show_error_popup('Data Load Error', 'hydroponicProblems.json file not found.')
         return []
     try:
-        with open(json_path, 'r', encoding='utf-8') as fh:
-            data = json.load(fh)
-    except FileNotFoundError:
-        print(f'Problem data not found at {json_path}')
-        return []
-    except json.JSONDecodeError as e:
-        print(f'Error parsing {json_path}: {e}')
-        return []
-    except OSError as e:
-        print(f'Error reading {json_path}: {e}')
-        return []
+        return load_problem_data(json_path)
     except Exception as e:
         msg = f'Error loading {json_path}: {e}'
         print(msg)
         show_error_popup('Data Load Error', msg)
-
         return []
-    return data.get('problems', [])
 
 # Screen definitions
 class MenuScreen(Screen):
@@ -87,39 +79,11 @@ class NutrientCalculatorScreen(Screen):
             self.data_loaded = False
             return
         try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                full = json.load(f)
-        except FileNotFoundError:
-            msg = f'Unable to find nutrients data at {json_path}.'
-            self.results_text = msg
-            Popup(title='Data Load Error',
-                  content=Label(text=msg),
-                  size_hint=(None, None), size=(400, 200)).open()
-            self.data_loaded = False
-            return
-        except json.JSONDecodeError:
-            msg = 'Error parsing nutrients.json.'
-            self.results_text = msg
-            Popup(title='Data Load Error',
-                  content=Label(text=msg),
-                  size_hint=(None, None), size=(400, 200)).open()
-            self.data_loaded = False
-            return
-        except OSError as e:
+            full = load_nutrient_data(json_path)
+        except Exception as e:
             msg = f'Error loading nutrients data: {e}'
             self.results_text = msg
-            Popup(title='Data Load Error',
-                  content=Label(text=msg),
-                  size_hint=(None, None), size=(400, 200)).open()
-            self.data_loaded = False
-            return
-        except Exception as e:
-            msg = f'Unexpected error loading nutrients data: {e}'
-            print(msg)
-            self.results_text = msg
-            Popup(title='Data Load Error',
-                  content=Label(text=msg),
-                  size_hint=(None, None), size=(400, 200)).open()
+            show_error_popup('Data Load Error', msg)
             self.data_loaded = False
             return
 
@@ -141,11 +105,13 @@ class NutrientCalculatorScreen(Screen):
             }
             for item in items
         ]
+        if self.menu:
+            self.menu.dismiss()
         self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
     def _set_item(self, caller, text_item, callback):
-        caller.set_item(text_item)
+        caller.text = text_item
         if self.menu:
             self.menu.dismiss()
         if callback:
@@ -194,34 +160,24 @@ class NutrientCalculatorScreen(Screen):
             return
         calmag = self.ids.calmag.text
 
-        # Compute factor based on base unit
-        base = nut_item['base_unit'][unit]
-        factor = volume / base['volume']
-
-        lines = []
-        # Plant category adjustments
-        cat_adj = self.plant_cat_data.get(plant_cat, {}).get('recommended_adjustments', {})
-        stage_adj = cat_adj.get(stage, {})
-
-        # Calculate each component with adjustment applied
-        for comp in nut_item['stages'][stage]:
-            base_amt = comp['concentration'][unit] * factor
-            adj = stage_adj.get(comp['name'], 0)
-            amt = base_amt + adj
-            if adj:
-                lines.append(
-                    f"{comp['name']}: {amt:.2f} {comp['unit'][unit]} (adjusted {adj})"
-                )
-            else:
-                lines.append(f"{comp['name']}: {amt:.2f} {comp['unit'][unit]}")
-
-        # Cal-Mag supplement
-        cal_item = next((c for c in self.calmag_data if c['product'] == calmag), None)
-        if cal_item:
-            base2 = cal_item['base_unit'][unit]
-            factor2 = volume / base2['volume']
-            cal_amt = cal_item['concentration'][unit] * factor2
-            lines.append(f"{cal_item['product']}: {cal_amt:.2f} {cal_item['unit']}")
+        try:
+            lines = calculate_nutrients(
+                {
+                    'nutrients': self.nutrient_data,
+                    'cal_mag_supplements': self.calmag_data,
+                    'plant_categories': self.plant_cat_data,
+                },
+                manu,
+                series,
+                stage,
+                plant_cat,
+                unit,
+                volume,
+                calmag,
+            )
+        except Exception as e:
+            self.results_text = f'Calculation error: {e}'
+            return
 
         self.results_text = '\n'.join(lines)
 
@@ -361,11 +317,13 @@ class ProblemSearchScreen(Screen):
             }
             for item in items
         ]
+        if self.menu:
+            self.menu.dismiss()
         self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
     def _set_item(self, caller, text_item):
-        caller.set_item(text_item)
+        caller.text = text_item
         if self.menu:
             self.menu.dismiss()
 
@@ -385,18 +343,13 @@ class ProblemSearchScreen(Screen):
         if medium.startswith('Select'):
             medium = ''
 
-        matches = []
-        for prob in self.problems:
-            if plant and plant not in prob.get('applicablePlants', []):
-                continue
-            if stage and stage not in prob.get('growthStages', []):
-                continue
-            if medium and medium not in prob.get('growMedia', []):
-                continue
-            if system and system not in ('--', '-- All Systems --') \
-                    and system not in prob.get('hydroponicSystems', []):
-                continue
-            matches.append(prob)
+        matches = search_problems(
+            self.problems,
+            plant=plant,
+            stage=stage,
+            medium=medium,
+            system=system,
+        )
 
         if not matches:
             self.ids.problem_results.text = 'No matching problems found.'
@@ -437,14 +390,7 @@ class ShelfLayoutScreen(Screen):
         app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
-        if os.path.exists(shelves_path):
-            try:
-                with open(shelves_path, 'r') as fh:
-                    self.shelves = json.load(fh)
-            except (json.JSONDecodeError, OSError):
-                self.shelves = []
-        else:
-            self.shelves = []
+        self.shelves = load_shelves(shelves_path)
 
         self.ids.layout.clear_widgets()
         for plant in self.shelves:
@@ -461,10 +407,8 @@ class ShelfLayoutScreen(Screen):
         app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
-        os.makedirs(base_dir, exist_ok=True)
         try:
-            with open(shelves_path, 'w') as fh:
-                json.dump(self.shelves, fh)
+            save_shelves(shelves_path, self.shelves)
         except OSError as e:
             print(f"Error saving shelves: {e}")
 
