@@ -322,6 +322,7 @@ ScreenManager:
     NutrientCalculatorScreen:
     ProblemSearchScreen:
     ShelfLayoutScreen:
+    ScheduleLogScreen:
 
 
 <MenuScreen>:
@@ -343,6 +344,9 @@ ScreenManager:
 
             text: '\U0001F4DA Shelf Layout'
             on_release: app.sm.current = 'shelf_layout'
+        Button:
+            text: 'Schedule Log'
+            on_release: app.sm.current = 'schedule_log'
 
 
 <NutrientCalculatorScreen>:
