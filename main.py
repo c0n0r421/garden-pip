@@ -140,19 +140,24 @@ class NutrientCalculatorScreen(Screen):
         os.makedirs(app.user_data_dir, exist_ok=True)
         if os.path.exists(log_path):
             try:
-                with open(log_path, 'r') as fh:
+                with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception:
+            except Exception as e:
+                self.results_text += f"\nFailed to read log file: {e}"
                 data = []
         else:
             data = []
         data.append(entry)
-        with open(log_path, 'w') as fh:
-            json.dump(data, fh, indent=2)
+        try:
+            with open(log_path, 'w', encoding='utf-8') as fh:
+                json.dump(data, fh, indent=2)
+        except Exception as e:
+            self.results_text += f"\nFailed to write log file: {e}"
 
 
 class ScheduleLogScreen(Screen):
     log_entries = ListProperty([])
+    status_text = StringProperty('')
 
     def on_pre_enter(self):
         self.load_log()
@@ -162,9 +167,10 @@ class ScheduleLogScreen(Screen):
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             try:
-                with open(log_path, 'r') as fh:
+                with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception:
+            except Exception as e:
+                self.status_text = f"Failed to read log: {e}"
                 data = []
         else:
             data = []
@@ -176,8 +182,11 @@ class ScheduleLogScreen(Screen):
     def clear_log(self):
         app = App.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
-        if os.path.exists(log_path):
-            os.remove(log_path)
+        try:
+            if os.path.exists(log_path):
+                os.remove(log_path)
+        except Exception as e:
+            self.status_text = f"Failed to clear log: {e}"
         self.load_log()
 
     def export_log(self):
@@ -185,7 +194,12 @@ class ScheduleLogScreen(Screen):
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
-            shutil.copy(log_path, export_path)
+            try:
+                shutil.copy(log_path, export_path)
+            except Exception as e:
+                self.status_text = f"Failed to export log: {e}"
+        else:
+            self.status_text = 'No log file to export.'
 
 class ProblemSearchScreen(Screen):
     def search(self):
@@ -419,6 +433,11 @@ ScreenManager:
     name: 'schedule_log'
     BoxLayout:
         orientation: 'vertical'
+        Label:
+            id: log_status
+            text: root.status_text
+            size_hint_y: None
+            height: self.texture_size[1]
         RecycleView:
             id: log_list
             viewclass: 'Label'
