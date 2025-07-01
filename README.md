@@ -9,14 +9,17 @@ Garden Pip is a Kivy-based application providing tools for managing a small-scal
    sudo apt update
    sudo apt install python3 python3-pip
    ```
-2. Install Kivy and its dependencies (one way is via `pip`):
-   ```bash
-   pip3 install kivy
-   ```
-3. Clone this repository on your Raspberry Pi and run the application:
+2. Clone this repository on your Raspberry Pi:
    ```bash
    git clone <repository url>
    cd garden-pip
+   ```
+3. Install the required Python packages:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+4. Run the application:
+   ```bash
    python3 main.py
    ```
 
