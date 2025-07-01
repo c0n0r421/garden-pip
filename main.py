@@ -1,6 +1,7 @@
 import json
 import os
 
+import logging
 import shutil
 from datetime import datetime
 
@@ -20,6 +21,12 @@ from kivy.uix.scatter import Scatter
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.resources import resource_find
+
+logging.basicConfig(
+    filename=os.path.join(os.getcwd(), 'run.log'),
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s:%(name)s:%(message)s'
+)
 
 from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
 from gardenpip.problem_logic import load_problem_data, search_problems
@@ -45,7 +52,7 @@ def load_hydroponic_problems():
         return load_problem_data(json_path)
     except Exception as e:
         msg = f'Error loading {json_path}: {e}'
-        print(msg)
+        logging.error(msg)
         show_error_popup('Data Load Error', msg)
         return []
 
@@ -212,7 +219,7 @@ class NutrientCalculatorScreen(Screen):
                 data = []
             except Exception as e:
                 self.results_text += f"\nUnexpected error reading log file: {e}"
-                print(e)
+                logging.exception(e)
                 data = []
         else:
             data = []
@@ -224,7 +231,7 @@ class NutrientCalculatorScreen(Screen):
             self.results_text += f"\nFailed to write log file: {e}"
         except Exception as e:
             self.results_text += f"\nUnexpected error writing log file: {e}"
-            print(e)
+            logging.exception(e)
 
 
 class ScheduleLogScreen(Screen):
@@ -249,7 +256,7 @@ class ScheduleLogScreen(Screen):
                 data = []
             except Exception as e:
                 self.status_text = f"Unexpected error reading log: {e}"
-                print(e)
+                logging.exception(e)
                 data = []
         else:
             data = []
@@ -271,7 +278,7 @@ class ScheduleLogScreen(Screen):
             self.status_text = f"Failed to clear log: {e}"
         except Exception as e:
             self.status_text = f"Unexpected error clearing log: {e}"
-            print(e)
+            logging.exception(e)
         self.load_log()
 
     def export_log(self):
@@ -288,7 +295,7 @@ class ScheduleLogScreen(Screen):
                 self.status_text = f"Failed to export log: {e}"
             except Exception as e:
                 self.status_text = f"Unexpected error exporting log: {e}"
-                print(e)
+                logging.exception(e)
         else:
             self.status_text = 'No log file to export.'
 
@@ -425,7 +432,7 @@ class ShelfLayoutScreen(Screen):
         try:
             save_shelves(shelves_path, self.shelves)
         except OSError as e:
-            print(f"Error saving shelves: {e}")
+            logging.error(f"Error saving shelves: {e}")
 
     def on_leave(self):
         self.save_shelves()
