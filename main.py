@@ -120,6 +120,9 @@ class NutrientCalculatorScreen(Screen):
         except ValueError:
             self.results_text = 'Enter a valid volume.'
             return
+        if volume <= 0:
+            self.results_text = 'Enter a volume greater than zero.'
+            return
         calmag = self.ids.calmag.text
 
         # Compute factor based on base unit
