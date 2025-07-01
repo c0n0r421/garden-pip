@@ -11,6 +11,18 @@ from kivy.properties import ListProperty, StringProperty
 from kivy.uix.scatter import Scatter
 from kivy.uix.label import Label
 
+# Helper to load problem data
+def load_hydroponic_problems():
+    """Load and return problems from hydroponicProblems.json."""
+    json_path = os.path.join(os.path.dirname(__file__), 'hydroponicProblems.json')
+    try:
+        with open(json_path, 'r', encoding='utf-8') as fh:
+            data = json.load(fh)
+        return data.get('problems', [])
+    except Exception as e:
+        print(f'Error loading {json_path}: {e}')
+        return []
+
 # Screen definitions
 class MenuScreen(Screen):
     pass
@@ -188,9 +200,39 @@ class ScheduleLogScreen(Screen):
             shutil.copy(log_path, export_path)
 
 class ProblemSearchScreen(Screen):
+    problems = []
+
+    def on_pre_enter(self):
+        if not self.problems:
+            self.problems = load_hydroponic_problems()
+
     def search(self):
-        # TODO: load and filter your hydroponic problems data here
-        self.ids.problem_results.text = 'Search functionality coming soon.'
+        if not self.problems:
+            self.problems = load_hydroponic_problems()
+
+        plant = self.ids.problem_plant.text.strip()
+        stage = self.ids.problem_stage.text.strip()
+        medium = self.ids.problem_medium.text.strip()
+        system = self.ids.problem_system.text.strip()
+
+        matches = []
+        for prob in self.problems:
+            if plant and plant not in prob.get('applicablePlants', []):
+                continue
+            if stage and stage not in prob.get('growthStages', []):
+                continue
+            if medium and medium not in prob.get('growMedia', []):
+                continue
+            if system and system not in ('--', '-- All Systems --') \
+                    and system not in prob.get('hydroponicSystems', []):
+                continue
+            matches.append(prob)
+
+        if not matches:
+            self.ids.problem_results.text = 'No matching problems found.'
+        else:
+            lines = [f"{p['title']}: {p.get('description', '')}" for p in matches]
+            self.ids.problem_results.text = '\n\n'.join(lines)
 
 
 class PlantWidget(Scatter):
