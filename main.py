@@ -4,7 +4,8 @@ import os
 import shutil
 from datetime import datetime
 
-from kivy.app import App
+from kivymd.app import MDApp
+from kivymd.uix.menu import MDDropDownMenu
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ListProperty, StringProperty, BooleanProperty
@@ -37,6 +38,8 @@ class NutrientCalculatorScreen(Screen):
     cal_mag_supplements = ListProperty()
     results_text = StringProperty('')
     data_loaded = BooleanProperty(False)
+
+    menu = None
 
     def on_pre_enter(self):
         # Load data once when entering the screen
@@ -81,6 +84,25 @@ class NutrientCalculatorScreen(Screen):
         self.plant_categories = list(self.plant_cat_data.keys())
         self.cal_mag_supplements = [c['product'] for c in self.calmag_data]
         self.data_loaded = True
+
+    def open_dropdown(self, caller, items, callback=None):
+        menu_items = [
+            {
+                'viewclass': 'OneLineListItem',
+                'text': item,
+                'on_release': lambda x=item: self._set_item(caller, x, callback)
+            }
+            for item in items
+        ]
+        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu.open()
+
+    def _set_item(self, caller, text_item, callback):
+        caller.set_item(text_item)
+        if self.menu:
+            self.menu.dismiss()
+        if callback:
+            callback(text_item)
 
     def on_manufacturer_select(self, manufacturer):
         # Filter series & stages when manufacturer changes
@@ -165,7 +187,7 @@ class NutrientCalculatorScreen(Screen):
             })
 
     def log_schedule(self, entry):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         os.makedirs(app.user_data_dir, exist_ok=True)
         if os.path.exists(log_path):
@@ -193,7 +215,7 @@ class ScheduleLogScreen(Screen):
         self.load_log()
 
     def load_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             try:
@@ -210,7 +232,7 @@ class ScheduleLogScreen(Screen):
         ]
 
     def clear_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         try:
             if os.path.exists(log_path):
@@ -220,7 +242,7 @@ class ScheduleLogScreen(Screen):
         self.load_log()
 
     def export_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
@@ -233,6 +255,11 @@ class ScheduleLogScreen(Screen):
 
 class ProblemSearchScreen(Screen):
     problems = []
+    plant_options = ListProperty()
+    stage_options = ListProperty()
+    medium_options = ListProperty()
+    system_options = ListProperty()
+    menu = None
 
     def on_pre_enter(self):
         if not self.problems:
@@ -248,12 +275,29 @@ class ProblemSearchScreen(Screen):
             media.update(prob.get('growMedia', []))
             systems.update(prob.get('hydroponicSystems', []))
 
-        self.ids.problem_plant.values = sorted(plants)
-        self.ids.problem_stage.values = sorted(stages)
-        self.ids.problem_medium.values = sorted(media)
-        self.ids.problem_system.values = ['-- All Systems --'] + sorted(systems)
+        self.plant_options = sorted(plants)
+        self.stage_options = sorted(stages)
+        self.medium_options = sorted(media)
+        self.system_options = ['-- All Systems --'] + sorted(systems)
         if not self.ids.problem_system.text:
             self.ids.problem_system.text = '-- All Systems --'
+
+    def open_dropdown(self, caller, items):
+        menu_items = [
+            {
+                'viewclass': 'OneLineListItem',
+                'text': item,
+                'on_release': lambda x=item: self._set_item(caller, x)
+            }
+            for item in items
+        ]
+        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu.open()
+
+    def _set_item(self, caller, text_item):
+        caller.set_item(text_item)
+        if self.menu:
+            self.menu.dismiss()
 
     def search(self):
         if not self.problems:
@@ -320,7 +364,7 @@ class ShelfLayoutScreen(Screen):
         self.load_shelves()
 
     def load_shelves(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
         if os.path.exists(shelves_path):
@@ -344,7 +388,7 @@ class ShelfLayoutScreen(Screen):
         self.ids.layout.add_widget(widget)
 
     def save_shelves(self, *args):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
         os.makedirs(base_dir, exist_ok=True)
@@ -359,7 +403,7 @@ class ShelfLayoutScreen(Screen):
 
 
 
-class GardenPipApp(App):
+class GardenPipApp(MDApp):
     def build(self):
         kv_path = os.path.join(os.path.dirname(__file__), 'gardenpip.kv')
         self.sm = Builder.load_file(kv_path)

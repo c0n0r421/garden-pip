@@ -4,88 +4,93 @@ ScreenManager:
     ProblemSearchScreen:
     ShelfLayoutScreen:
 
-
 <MenuScreen>:
     name: 'menu'
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
-        spacing: 10
-        padding: 20
-        Label:
-            text: 'Garden Pip Tools'
-            font_size: '24sp'
-        Button:
-            text: '🌿 Nutrient Calculator'
-            on_release: app.sm.current = 'nutrient_calc'
-        Button:
-            text: '🔍 Hydroponic Problem Search'
-            on_release: app.sm.current = 'problem_search'
-        Button:
-
-            text: '\U0001F4DA Shelf Layout'
-            on_release: app.sm.current = 'shelf_layout'
-
+        MDToolbar:
+            title: 'Garden Pip'
+            elevation: 10
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: 20
+            spacing: 10
+            MDLabel:
+                text: 'Garden Pip Tools'
+                halign: 'center'
+                font_style: 'H5'
+            MDRaisedButton:
+                text: '🌿 Nutrient Calculator'
+                on_release: app.sm.current = 'nutrient_calc'
+            MDRaisedButton:
+                text: '🔍 Hydroponic Problem Search'
+                on_release: app.sm.current = 'problem_search'
+            MDRaisedButton:
+                text: '\U0001F4DA Shelf Layout'
+                on_release: app.sm.current = 'shelf_layout'
 
 <NutrientCalculatorScreen>:
     name: 'nutrient_calc'
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
+        MDToolbar:
+            title: 'Nutrient Calculator'
+            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            elevation: 10
         ScrollView:
-            GridLayout:
+            MDGridLayout:
                 cols: 1
                 size_hint_y: None
                 height: self.minimum_height
                 padding: 10
                 spacing: 10
-                Spinner:
+                MDDropDownItem:
                     id: manufacturer
                     text: 'Select Manufacturer'
-                    values: root.manufacturers
-                    on_text: root.on_manufacturer_select(self.text)
-                Spinner:
+                    on_release: root.open_dropdown(self, root.manufacturers, root.on_manufacturer_select)
+                MDDropDownItem:
                     id: series
                     text: 'Select Series'
-                    values: root.series
-                Spinner:
+                    on_release: root.open_dropdown(self, root.series)
+                MDDropDownItem:
                     id: stage
                     text: 'Select Stage'
-                    values: root.stages
-                Spinner:
+                    on_release: root.open_dropdown(self, root.stages)
+                MDDropDownItem:
                     id: plant_category
                     text: 'Select Plant Category'
-                    values: root.plant_categories
-                Spinner:
+                    on_release: root.open_dropdown(self, root.plant_categories)
+                MDDropDownItem:
                     id: unit
                     text: 'metric'
-                    values: root.units
-                TextInput:
+                    on_release: root.open_dropdown(self, root.units)
+                MDTextField:
                     id: volume
                     hint_text: 'Enter volume'
                     input_filter: 'float'
-                Spinner:
+                MDDropDownItem:
                     id: calmag
                     text: 'Select Cal-Mag'
-                    values: root.cal_mag_supplements
-                Button:
+                    on_release: root.open_dropdown(self, root.cal_mag_supplements)
+                MDRaisedButton:
                     text: 'Calculate'
                     size_hint_y: None
                     height: 40
                     on_release: root.calculate()
-                Label:
+                MDLabel:
                     id: results
                     text: root.results_text
                     size_hint_y: None
                     height: self.texture_size[1]
-        Button:
-            text: '← Back to menu'
-            size_hint_y: None
-            height: 40
-            on_release: app.sm.current = 'menu'
 
 <ShelfLayoutScreen>:
     name: 'shelf_layout'
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
+        MDToolbar:
+            title: 'Shelf Layout'
+            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            elevation: 10
         FloatLayout:
             id: layout
             size_hint_y: 0.9
@@ -103,86 +108,83 @@ ScreenManager:
                 Rectangle:
                     pos: self.x, self.y + self.height * 0.66
                     size: self.width, 2
-        BoxLayout:
+        MDBoxLayout:
             size_hint_y: 0.1
-            Button:
+            MDRaisedButton:
                 text: 'Add Plant'
                 on_release: root.add_plant_widget()
-            Button:
-                text: '← Back to menu'
-                on_release: app.sm.current = 'menu'
 
 <ProblemSearchScreen>:
     name: 'problem_search'
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
+        MDToolbar:
+            title: 'Problem Search'
+            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            elevation: 10
         ScrollView:
-            GridLayout:
+            MDGridLayout:
                 cols: 1
                 size_hint_y: None
                 height: self.minimum_height
                 padding: 10
                 spacing: 10
-                Spinner:
+                MDDropDownItem:
                     id: problem_plant
                     text: 'Select Plant'
-                    values: []
-                Spinner:
+                    on_release: root.open_dropdown(self, root.plant_options)
+                MDDropDownItem:
                     id: problem_stage
                     text: 'Select Growth Stage'
-                    values: []
-                Spinner:
+                    on_release: root.open_dropdown(self, root.stage_options)
+                MDDropDownItem:
                     id: problem_medium
                     text: 'Select Grow Medium'
-                    values: []
-                Spinner:
+                    on_release: root.open_dropdown(self, root.medium_options)
+                MDDropDownItem:
                     id: problem_system
                     text: '-- All Systems --'
-                    values: ['--']
-                TextInput:
+                    on_release: root.open_dropdown(self, root.system_options)
+                MDTextField:
                     id: problem_description
                     hint_text: 'Describe the issue...'
-                Button:
+                MDRaisedButton:
                     text: 'Search'
                     size_hint_y: None
                     height: 40
                     on_release: root.search()
-                Label:
+                MDLabel:
                     id: problem_results
                     text: ''
                     size_hint_y: None
                     height: self.texture_size[1]
-        Button:
-            text: '← Back to menu'
-            size_hint_y: None
-            height: 40
-            on_release: app.sm.current = 'menu'
 
 <ScheduleLogScreen>:
     name: 'schedule_log'
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
-        Label:
+        MDToolbar:
+            title: 'Schedule Log'
+            left_action_items: [["arrow-left", lambda x: app.sm.current = 'menu']]
+            elevation: 10
+        MDLabel:
             id: log_status
             text: root.status_text
             size_hint_y: None
             height: self.texture_size[1]
         RecycleView:
             id: log_list
-            viewclass: 'Label'
+            viewclass: 'MDLabel'
             data: [{'text': e} for e in root.log_entries]
-        BoxLayout:
+        MDBoxLayout:
             size_hint_y: None
             height: 40
-            Button:
+            MDRaisedButton:
                 text: 'Refresh'
                 on_release: root.load_log()
-            Button:
+            MDRaisedButton:
                 text: 'Export'
                 on_release: root.export_log()
-            Button:
+            MDRaisedButton:
                 text: 'Clear'
                 on_release: root.clear_log()
-            Button:
-                text: '← Back to menu'
-                on_release: app.sm.current = 'menu'
