@@ -107,6 +107,7 @@ class NutrientCalculatorScreen(Screen):
         ]
         if self.menu:
             self.menu.dismiss()
+            self.menu = None
         self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
@@ -114,6 +115,7 @@ class NutrientCalculatorScreen(Screen):
         caller.text = text_item
         if self.menu:
             self.menu.dismiss()
+            self.menu = None
         if callback:
             callback(text_item)
 
@@ -319,6 +321,7 @@ class ProblemSearchScreen(Screen):
         ]
         if self.menu:
             self.menu.dismiss()
+            self.menu = None
         self.menu = MDDropdownMenu(caller=caller, items=menu_items, width_mult=4)
         self.menu.open()
 
@@ -326,6 +329,7 @@ class ProblemSearchScreen(Screen):
         caller.text = text_item
         if self.menu:
             self.menu.dismiss()
+            self.menu = None
 
     def search(self):
         if not self.problems:
