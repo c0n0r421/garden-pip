@@ -4,7 +4,8 @@ import os
 import shutil
 from datetime import datetime
 
-from kivy.app import App
+from kivymd.app import MDApp
+from kivymd.uix.menu import MDDropDownMenu
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ListProperty, StringProperty, BooleanProperty
@@ -32,12 +33,22 @@ def load_hydroponic_problems():
     try:
         with open(json_path, 'r', encoding='utf-8') as fh:
             data = json.load(fh)
-        return data.get('problems', [])
+    except FileNotFoundError:
+        print(f'Problem data not found at {json_path}')
+        return []
+    except json.JSONDecodeError as e:
+        print(f'Error parsing {json_path}: {e}')
+        return []
+    except OSError as e:
+        print(f'Error reading {json_path}: {e}')
+        return []
     except Exception as e:
         msg = f'Error loading {json_path}: {e}'
         print(msg)
         show_error_popup('Data Load Error', msg)
+
         return []
+    return data.get('problems', [])
 
 # Screen definitions
 class MenuScreen(Screen):
@@ -52,6 +63,8 @@ class NutrientCalculatorScreen(Screen):
     cal_mag_supplements = ListProperty()
     results_text = StringProperty('')
     data_loaded = BooleanProperty(False)
+
+    menu = None
 
     def on_pre_enter(self):
         # Load data once when entering the screen
@@ -85,8 +98,17 @@ class NutrientCalculatorScreen(Screen):
                   size_hint=(None, None), size=(400, 200)).open()
             self.data_loaded = False
             return
-        except Exception as e:
+        except OSError as e:
             msg = f'Error loading nutrients data: {e}'
+            self.results_text = msg
+            Popup(title='Data Load Error',
+                  content=Label(text=msg),
+                  size_hint=(None, None), size=(400, 200)).open()
+            self.data_loaded = False
+            return
+        except Exception as e:
+            msg = f'Unexpected error loading nutrients data: {e}'
+            print(msg)
             self.results_text = msg
             Popup(title='Data Load Error',
                   content=Label(text=msg),
@@ -102,6 +124,25 @@ class NutrientCalculatorScreen(Screen):
         self.plant_categories = list(self.plant_cat_data.keys())
         self.cal_mag_supplements = [c['product'] for c in self.calmag_data]
         self.data_loaded = True
+
+    def open_dropdown(self, caller, items, callback=None):
+        menu_items = [
+            {
+                'viewclass': 'OneLineListItem',
+                'text': item,
+                'on_release': lambda x=item: self._set_item(caller, x, callback)
+            }
+            for item in items
+        ]
+        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu.open()
+
+    def _set_item(self, caller, text_item, callback):
+        caller.set_item(text_item)
+        if self.menu:
+            self.menu.dismiss()
+        if callback:
+            callback(text_item)
 
     def on_manufacturer_select(self, manufacturer):
         # Filter series & stages when manufacturer changes
@@ -141,6 +182,9 @@ class NutrientCalculatorScreen(Screen):
         except ValueError:
             self.results_text = 'Enter a valid volume.'
             return
+        if volume <= 0:
+            self.results_text = 'Enter a volume greater than zero.'
+            return
         calmag = self.ids.calmag.text
 
         # Compute factor based on base unit
@@ -148,10 +192,21 @@ class NutrientCalculatorScreen(Screen):
         factor = volume / base['volume']
 
         lines = []
-        # Calculate each component
+        # Plant category adjustments
+        cat_adj = self.plant_cat_data.get(plant_cat, {}).get('recommended_adjustments', {})
+        stage_adj = cat_adj.get(stage, {})
+
+        # Calculate each component with adjustment applied
         for comp in nut_item['stages'][stage]:
-            amt = comp['concentration'][unit] * factor
-            lines.append(f"{comp['name']}: {amt:.2f} {comp['unit'][unit]}")
+            base_amt = comp['concentration'][unit] * factor
+            adj = stage_adj.get(comp['name'], 0)
+            amt = base_amt + adj
+            if adj:
+                lines.append(
+                    f"{comp['name']}: {amt:.2f} {comp['unit'][unit]} (adjusted {adj})"
+                )
+            else:
+                lines.append(f"{comp['name']}: {amt:.2f} {comp['unit'][unit]}")
 
         # Cal-Mag supplement
         cal_item = next((c for c in self.calmag_data if c['product'] == calmag), None)
@@ -160,14 +215,6 @@ class NutrientCalculatorScreen(Screen):
             factor2 = volume / base2['volume']
             cal_amt = cal_item['concentration'][unit] * factor2
             lines.append(f"{cal_item['product']}: {cal_amt:.2f} {cal_item['unit']}")
-
-        # Plant category adjustments
-        cat_adj = self.plant_cat_data.get(plant_cat, {}).get('recommended_adjustments', {})
-        stage_adj = cat_adj.get(stage, {})
-        for comp in nut_item['stages'][stage]:
-            adj = stage_adj.get(comp['name'], 0)
-            if adj:
-                lines.append(f"Adjustment {comp['name']}: {adj}")
 
         self.results_text = '\n'.join(lines)
 
@@ -186,15 +233,19 @@ class NutrientCalculatorScreen(Screen):
             })
 
     def log_schedule(self, entry):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         os.makedirs(app.user_data_dir, exist_ok=True)
         if os.path.exists(log_path):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception as e:
+            except (json.JSONDecodeError, OSError) as e:
                 self.results_text += f"\nFailed to read log file: {e}"
+                data = []
+            except Exception as e:
+                self.results_text += f"\nUnexpected error reading log file: {e}"
+                print(e)
                 data = []
         else:
             data = []
@@ -202,8 +253,11 @@ class NutrientCalculatorScreen(Screen):
         try:
             with open(log_path, 'w', encoding='utf-8') as fh:
                 json.dump(data, fh, indent=2)
-        except Exception as e:
+        except OSError as e:
             self.results_text += f"\nFailed to write log file: {e}"
+        except Exception as e:
+            self.results_text += f"\nUnexpected error writing log file: {e}"
+            print(e)
 
 
 class ScheduleLogScreen(Screen):
@@ -214,14 +268,18 @@ class ScheduleLogScreen(Screen):
         self.load_log()
 
     def load_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception as e:
+            except (json.JSONDecodeError, OSError) as e:
                 self.status_text = f"Failed to read log: {e}"
+                data = []
+            except Exception as e:
+                self.status_text = f"Unexpected error reading log: {e}"
+                print(e)
                 data = []
         else:
             data = []
@@ -231,29 +289,40 @@ class ScheduleLogScreen(Screen):
         ]
 
     def clear_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         try:
             if os.path.exists(log_path):
                 os.remove(log_path)
-        except Exception as e:
+        except OSError as e:
             self.status_text = f"Failed to clear log: {e}"
+        except Exception as e:
+            self.status_text = f"Unexpected error clearing log: {e}"
+            print(e)
         self.load_log()
 
     def export_log(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         log_path = os.path.join(app.user_data_dir, 'schedule_log.json')
         if os.path.exists(log_path):
             export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
             try:
                 shutil.copy(log_path, export_path)
-            except Exception as e:
+            except OSError as e:
                 self.status_text = f"Failed to export log: {e}"
+            except Exception as e:
+                self.status_text = f"Unexpected error exporting log: {e}"
+                print(e)
         else:
             self.status_text = 'No log file to export.'
 
 class ProblemSearchScreen(Screen):
     problems = []
+    plant_options = ListProperty()
+    stage_options = ListProperty()
+    medium_options = ListProperty()
+    system_options = ListProperty()
+    menu = None
 
     def on_pre_enter(self):
         if not self.problems:
@@ -269,12 +338,29 @@ class ProblemSearchScreen(Screen):
             media.update(prob.get('growMedia', []))
             systems.update(prob.get('hydroponicSystems', []))
 
-        self.ids.problem_plant.values = sorted(plants)
-        self.ids.problem_stage.values = sorted(stages)
-        self.ids.problem_medium.values = sorted(media)
-        self.ids.problem_system.values = ['-- All Systems --'] + sorted(systems)
+        self.plant_options = sorted(plants)
+        self.stage_options = sorted(stages)
+        self.medium_options = sorted(media)
+        self.system_options = ['-- All Systems --'] + sorted(systems)
         if not self.ids.problem_system.text:
             self.ids.problem_system.text = '-- All Systems --'
+
+    def open_dropdown(self, caller, items):
+        menu_items = [
+            {
+                'viewclass': 'OneLineListItem',
+                'text': item,
+                'on_release': lambda x=item: self._set_item(caller, x)
+            }
+            for item in items
+        ]
+        self.menu = MDDropDownMenu(caller=caller, items=menu_items, width_mult=4)
+        self.menu.open()
+
+    def _set_item(self, caller, text_item):
+        caller.set_item(text_item)
+        if self.menu:
+            self.menu.dismiss()
 
     def search(self):
         if not self.problems:
@@ -341,7 +427,7 @@ class ShelfLayoutScreen(Screen):
         self.load_shelves()
 
     def load_shelves(self):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
         if os.path.exists(shelves_path):
@@ -365,7 +451,7 @@ class ShelfLayoutScreen(Screen):
         self.ids.layout.add_widget(widget)
 
     def save_shelves(self, *args):
-        app = App.get_running_app()
+        app = MDApp.get_running_app()
         base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
         shelves_path = os.path.join(base_dir, 'shelves.json')
         os.makedirs(base_dir, exist_ok=True)
@@ -380,7 +466,7 @@ class ShelfLayoutScreen(Screen):
 
 
 
-class GardenPipApp(App):
+class GardenPipApp(MDApp):
     def build(self):
         kv_path = os.path.join(os.path.dirname(__file__), 'gardenpip.kv')
         self.sm = Builder.load_file(kv_path)
