@@ -4,7 +4,9 @@ Garden Pip is a Kivy-based application providing tools for managing a small-scal
 
 ## Running on Raspberry Pi
 
-1. Ensure Python 3 and `pip` are installed:
+Python 3.8 or later (including 3.11) is required to run Garden Pip.
+
+1. Ensure Python 3.8 or newer and `pip` are installed (Python 3.11 works):
    ```bash
    sudo apt update
    sudo apt install python3 python3-pip
@@ -16,7 +18,7 @@ Garden Pip is a Kivy-based application providing tools for managing a small-scal
    ```
 3. Install the required Python packages:
    ```bash
-   pip3 install -r requirements.txt  # installs kivy and kivymd
+   pip3 install --upgrade -r requirements.txt  # upgrade packages to meet Python 3.8+
    ```
    Material Design style widgets rely on the KivyMD package.
 4. Run the application:
