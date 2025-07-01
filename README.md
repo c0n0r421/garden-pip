@@ -16,8 +16,9 @@ Garden Pip is a Kivy-based application providing tools for managing a small-scal
    ```
 3. Install the required Python packages:
    ```bash
-   pip3 install -r requirements.txt
+   pip3 install -r requirements.txt  # installs kivy and kivymd
    ```
+   Material Design style widgets rely on the KivyMD package.
 4. Run the application:
    ```bash
    python3 main.py
