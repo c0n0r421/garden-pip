@@ -10,23 +10,31 @@ ScreenManager:
         orientation: 'vertical'
         MDTopAppBar:
             title: 'Garden Pip'
-            elevation: 10
+            elevation: 2
         MDBoxLayout:
             orientation: 'vertical'
-            padding: 20
-            spacing: 10
-            MDLabel:
-                text: 'Garden Pip Tools'
-                halign: 'center'
-                font_style: 'H5'
+            padding: '40dp'
+            spacing: '20dp'
+            size_hint_y: None
+            height: self.minimum_height
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             MDRaisedButton:
                 text: '🌿 Nutrient Calculator'
+                size_hint: None, None
+                size: '250dp', '60dp'
+                pos_hint: {'center_x': 0.5}
                 on_release: app.sm.current = 'nutrient_calc'
             MDRaisedButton:
                 text: '🔍 Hydroponic Problem Search'
+                size_hint: None, None
+                size: '250dp', '60dp'
+                pos_hint: {'center_x': 0.5}
                 on_release: app.sm.current = 'problem_search'
             MDRaisedButton:
                 text: '\U0001F4DA Shelf Layout'
+                size_hint: None, None
+                size: '250dp', '60dp'
+                pos_hint: {'center_x': 0.5}
                 on_release: app.sm.current = 'shelf_layout'
 
 <NutrientCalculatorScreen>:
@@ -36,7 +44,7 @@ ScreenManager:
         MDTopAppBar:
             title: 'Nutrient Calculator'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 10
+            elevation: 2
         ScrollView:
             MDGridLayout:
                 cols: 1
@@ -90,7 +98,7 @@ ScreenManager:
         MDTopAppBar:
             title: 'Shelf Layout'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 10
+            elevation: 2
         FloatLayout:
             id: layout
             size_hint_y: 0.9
@@ -121,7 +129,7 @@ ScreenManager:
         MDTopAppBar:
             title: 'Problem Search'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 10
+            elevation: 2
         ScrollView:
             MDGridLayout:
                 cols: 1
@@ -166,7 +174,7 @@ ScreenManager:
         MDTopAppBar:
             title: 'Schedule Log'
             left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 10
+            elevation: 2
         MDLabel:
             id: log_status
             text: root.status_text
