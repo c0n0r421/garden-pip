@@ -1,0 +1,188 @@
+ScreenManager:
+    MenuScreen:
+    NutrientCalculatorScreen:
+    ProblemSearchScreen:
+    ShelfLayoutScreen:
+
+
+<MenuScreen>:
+    name: 'menu'
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 20
+        Label:
+            text: 'Garden Pip Tools'
+            font_size: '24sp'
+        Button:
+            text: '🌿 Nutrient Calculator'
+            on_release: app.sm.current = 'nutrient_calc'
+        Button:
+            text: '🔍 Hydroponic Problem Search'
+            on_release: app.sm.current = 'problem_search'
+        Button:
+
+            text: '\U0001F4DA Shelf Layout'
+            on_release: app.sm.current = 'shelf_layout'
+
+
+<NutrientCalculatorScreen>:
+    name: 'nutrient_calc'
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            GridLayout:
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                padding: 10
+                spacing: 10
+                Spinner:
+                    id: manufacturer
+                    text: 'Select Manufacturer'
+                    values: root.manufacturers
+                    on_text: root.on_manufacturer_select(self.text)
+                Spinner:
+                    id: series
+                    text: 'Select Series'
+                    values: root.series
+                Spinner:
+                    id: stage
+                    text: 'Select Stage'
+                    values: root.stages
+                Spinner:
+                    id: plant_category
+                    text: 'Select Plant Category'
+                    values: root.plant_categories
+                Spinner:
+                    id: unit
+                    text: 'metric'
+                    values: root.units
+                TextInput:
+                    id: volume
+                    hint_text: 'Enter volume'
+                    input_filter: 'float'
+                Spinner:
+                    id: calmag
+                    text: 'Select Cal-Mag'
+                    values: root.cal_mag_supplements
+                Button:
+                    text: 'Calculate'
+                    size_hint_y: None
+                    height: 40
+                    on_release: root.calculate()
+                Label:
+                    id: results
+                    text: root.results_text
+                    size_hint_y: None
+                    height: self.texture_size[1]
+        Button:
+            text: '← Back to menu'
+            size_hint_y: None
+            height: 40
+            on_release: app.sm.current = 'menu'
+
+<ShelfLayoutScreen>:
+    name: 'shelf_layout'
+    BoxLayout:
+        orientation: 'vertical'
+        FloatLayout:
+            id: layout
+            size_hint_y: 0.9
+            canvas.before:
+                Color:
+                    rgba: 0.9, 0.9, 0.9, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 0, 0, 0, 1
+                Rectangle:
+                    pos: self.x, self.y + self.height * 0.33
+                    size: self.width, 2
+                Rectangle:
+                    pos: self.x, self.y + self.height * 0.66
+                    size: self.width, 2
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'Add Plant'
+                on_release: root.add_plant_widget()
+            Button:
+                text: '← Back to menu'
+                on_release: app.sm.current = 'menu'
+
+<ProblemSearchScreen>:
+    name: 'problem_search'
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            GridLayout:
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                padding: 10
+                spacing: 10
+                Spinner:
+                    id: problem_plant
+                    text: 'Select Plant'
+                    values: []
+                Spinner:
+                    id: problem_stage
+                    text: 'Select Growth Stage'
+                    values: []
+                Spinner:
+                    id: problem_medium
+                    text: 'Select Grow Medium'
+                    values: []
+                Spinner:
+                    id: problem_system
+                    text: '-- All Systems --'
+                    values: ['--']
+                TextInput:
+                    id: problem_description
+                    hint_text: 'Describe the issue...'
+                Button:
+                    text: 'Search'
+                    size_hint_y: None
+                    height: 40
+                    on_release: root.search()
+                Label:
+                    id: problem_results
+                    text: ''
+                    size_hint_y: None
+                    height: self.texture_size[1]
+        Button:
+            text: '← Back to menu'
+            size_hint_y: None
+            height: 40
+            on_release: app.sm.current = 'menu'
+
+<ScheduleLogScreen>:
+    name: 'schedule_log'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: log_status
+            text: root.status_text
+            size_hint_y: None
+            height: self.texture_size[1]
+        RecycleView:
+            id: log_list
+            viewclass: 'Label'
+            data: [{'text': e} for e in root.log_entries]
+        BoxLayout:
+            size_hint_y: None
+            height: 40
+            Button:
+                text: 'Refresh'
+                on_release: root.load_log()
+            Button:
+                text: 'Export'
+                on_release: root.export_log()
+            Button:
+                text: 'Clear'
+                on_release: root.clear_log()
+            Button:
+                text: '← Back to menu'
+                on_release: app.sm.current = 'menu'
