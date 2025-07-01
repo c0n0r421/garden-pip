@@ -347,13 +347,6 @@ ScreenManager:
 
 <NutrientCalculatorScreen>:
     name: 'nutrient_calc'
-    manufacturer: manufacturer
-    series: series
-    stage: stage
-    plant_category: plant_category
-    unit: unit
-    volume: volume
-    calmag: calmag
     BoxLayout:
         orientation: 'vertical'
         ScrollView:
