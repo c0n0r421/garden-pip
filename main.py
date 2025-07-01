@@ -220,6 +220,23 @@ class ProblemSearchScreen(Screen):
         if not self.problems:
             self.problems = load_hydroponic_problems()
 
+        plants = set()
+        stages = set()
+        media = set()
+        systems = set()
+        for prob in self.problems:
+            plants.update(prob.get('applicablePlants', []))
+            stages.update(prob.get('growthStages', []))
+            media.update(prob.get('growMedia', []))
+            systems.update(prob.get('hydroponicSystems', []))
+
+        self.ids.problem_plant.values = sorted(plants)
+        self.ids.problem_stage.values = sorted(stages)
+        self.ids.problem_medium.values = sorted(media)
+        self.ids.problem_system.values = ['-- All Systems --'] + sorted(systems)
+        if not self.ids.problem_system.text:
+            self.ids.problem_system.text = '-- All Systems --'
+
     def search(self):
         if not self.problems:
             self.problems = load_hydroponic_problems()
@@ -228,6 +245,13 @@ class ProblemSearchScreen(Screen):
         stage = self.ids.problem_stage.text.strip()
         medium = self.ids.problem_medium.text.strip()
         system = self.ids.problem_system.text.strip()
+
+        if plant.startswith('Select'):
+            plant = ''
+        if stage.startswith('Select'):
+            stage = ''
+        if medium.startswith('Select'):
+            medium = ''
 
         matches = []
         for prob in self.problems:
