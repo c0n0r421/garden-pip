@@ -11,17 +11,32 @@ from kivy.properties import ListProperty, StringProperty, BooleanProperty
 from kivy.uix.scatter import Scatter
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
+from kivy.resources import resource_find
+
+# Simple helper for displaying error popups
+def show_error_popup(title, message):
+    Popup(
+        title=title,
+        content=Label(text=message),
+        size_hint=(None, None),
+        size=(400, 200),
+    ).open()
 
 # Helper to load problem data
 def load_hydroponic_problems():
     """Load and return problems from hydroponicProblems.json."""
-    json_path = os.path.join(os.path.dirname(__file__), 'hydroponicProblems.json')
+    json_path = resource_find('hydroponicProblems.json')
+    if not json_path:
+        show_error_popup('Data Load Error', 'hydroponicProblems.json file not found.')
+        return []
     try:
         with open(json_path, 'r', encoding='utf-8') as fh:
             data = json.load(fh)
         return data.get('problems', [])
     except Exception as e:
-        print(f'Error loading {json_path}: {e}')
+        msg = f'Error loading {json_path}: {e}'
+        print(msg)
+        show_error_popup('Data Load Error', msg)
         return []
 
 # Screen definitions
@@ -44,7 +59,13 @@ class NutrientCalculatorScreen(Screen):
             self.load_data()
 
     def load_data(self):
-        json_path = os.path.join(os.path.dirname(__file__), 'nutrients.json')
+        json_path = resource_find('nutrients.json')
+        if not json_path:
+            msg = 'nutrients.json file not found.'
+            self.results_text = msg
+            show_error_popup('Data Load Error', msg)
+            self.data_loaded = False
+            return
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 full = json.load(f)
