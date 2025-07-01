@@ -222,10 +222,16 @@ class ShelfLayoutScreen(Screen):
         self.load_shelves()
 
     def load_shelves(self):
-        try:
-            with open('shelves.json', 'r') as fh:
-                self.shelves = json.load(fh)
-        except Exception:
+        app = App.get_running_app()
+        base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
+        shelves_path = os.path.join(base_dir, 'shelves.json')
+        if os.path.exists(shelves_path):
+            try:
+                with open(shelves_path, 'r') as fh:
+                    self.shelves = json.load(fh)
+            except (json.JSONDecodeError, OSError):
+                self.shelves = []
+        else:
             self.shelves = []
 
         self.ids.layout.clear_widgets()
@@ -240,8 +246,15 @@ class ShelfLayoutScreen(Screen):
         self.ids.layout.add_widget(widget)
 
     def save_shelves(self, *args):
-        with open('shelves.json', 'w') as fh:
-            json.dump(self.shelves, fh)
+        app = App.get_running_app()
+        base_dir = getattr(app, 'user_data_dir', os.path.dirname(__file__))
+        shelves_path = os.path.join(base_dir, 'shelves.json')
+        os.makedirs(base_dir, exist_ok=True)
+        try:
+            with open(shelves_path, 'w') as fh:
+                json.dump(self.shelves, fh)
+        except OSError as e:
+            print(f"Error saving shelves: {e}")
 
     def on_leave(self):
         self.save_shelves()
