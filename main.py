@@ -7,9 +7,10 @@ from datetime import datetime
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import ListProperty, StringProperty
+from kivy.properties import ListProperty, StringProperty, BooleanProperty
 from kivy.uix.scatter import Scatter
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 
 # Helper to load problem data
 def load_hydroponic_problems():
@@ -35,6 +36,7 @@ class NutrientCalculatorScreen(Screen):
     units = ListProperty(['metric', 'imperial'])
     cal_mag_supplements = ListProperty()
     results_text = StringProperty('')
+    data_loaded = BooleanProperty(False)
 
     def on_pre_enter(self):
         # Load data once when entering the screen
@@ -47,13 +49,28 @@ class NutrientCalculatorScreen(Screen):
             with open(json_path, 'r', encoding='utf-8') as f:
                 full = json.load(f)
         except FileNotFoundError:
-            self.results_text = f'Unable to find nutrients data at {json_path}.'
+            msg = f'Unable to find nutrients data at {json_path}.'
+            self.results_text = msg
+            Popup(title='Data Load Error',
+                  content=Label(text=msg),
+                  size_hint=(None, None), size=(400, 200)).open()
+            self.data_loaded = False
             return
         except json.JSONDecodeError:
-            self.results_text = 'Error parsing nutrients.json.'
+            msg = 'Error parsing nutrients.json.'
+            self.results_text = msg
+            Popup(title='Data Load Error',
+                  content=Label(text=msg),
+                  size_hint=(None, None), size=(400, 200)).open()
+            self.data_loaded = False
             return
         except Exception as e:
-            self.results_text = f'Error loading nutrients data: {e}'
+            msg = f'Error loading nutrients data: {e}'
+            self.results_text = msg
+            Popup(title='Data Load Error',
+                  content=Label(text=msg),
+                  size_hint=(None, None), size=(400, 200)).open()
+            self.data_loaded = False
             return
 
         self.nutrient_data = full['nutrients']
@@ -63,6 +80,7 @@ class NutrientCalculatorScreen(Screen):
         self.manufacturers = [d['manufacturer'] for d in self.nutrient_data]
         self.plant_categories = list(self.plant_cat_data.keys())
         self.cal_mag_supplements = [c['product'] for c in self.calmag_data]
+        self.data_loaded = True
 
     def on_manufacturer_select(self, manufacturer):
         # Filter series & stages when manufacturer changes
@@ -220,6 +238,23 @@ class ProblemSearchScreen(Screen):
         if not self.problems:
             self.problems = load_hydroponic_problems()
 
+        plants = set()
+        stages = set()
+        media = set()
+        systems = set()
+        for prob in self.problems:
+            plants.update(prob.get('applicablePlants', []))
+            stages.update(prob.get('growthStages', []))
+            media.update(prob.get('growMedia', []))
+            systems.update(prob.get('hydroponicSystems', []))
+
+        self.ids.problem_plant.values = sorted(plants)
+        self.ids.problem_stage.values = sorted(stages)
+        self.ids.problem_medium.values = sorted(media)
+        self.ids.problem_system.values = ['-- All Systems --'] + sorted(systems)
+        if not self.ids.problem_system.text:
+            self.ids.problem_system.text = '-- All Systems --'
+
     def search(self):
         if not self.problems:
             self.problems = load_hydroponic_problems()
@@ -228,6 +263,13 @@ class ProblemSearchScreen(Screen):
         stage = self.ids.problem_stage.text.strip()
         medium = self.ids.problem_medium.text.strip()
         system = self.ids.problem_system.text.strip()
+
+        if plant.startswith('Select'):
+            plant = ''
+        if stage.startswith('Select'):
+            stage = ''
+        if medium.startswith('Select'):
+            medium = ''
 
         matches = []
         for prob in self.problems:
@@ -314,6 +356,7 @@ class ShelfLayoutScreen(Screen):
 
     def on_leave(self):
         self.save_shelves()
+
 
 
 class GardenPipApp(App):
