@@ -20,10 +20,19 @@ def load_hydroponic_problems():
     try:
         with open(json_path, 'r', encoding='utf-8') as fh:
             data = json.load(fh)
-        return data.get('problems', [])
-    except Exception as e:
-        print(f'Error loading {json_path}: {e}')
+    except FileNotFoundError:
+        print(f'Problem data not found at {json_path}')
         return []
+    except json.JSONDecodeError as e:
+        print(f'Error parsing {json_path}: {e}')
+        return []
+    except OSError as e:
+        print(f'Error reading {json_path}: {e}')
+        return []
+    except Exception as e:
+        print(f'Unexpected error loading {json_path}: {e}')
+        return []
+    return data.get('problems', [])
 
 # Screen definitions
 class MenuScreen(Screen):
@@ -67,8 +76,17 @@ class NutrientCalculatorScreen(Screen):
                   size_hint=(None, None), size=(400, 200)).open()
             self.data_loaded = False
             return
-        except Exception as e:
+        except OSError as e:
             msg = f'Error loading nutrients data: {e}'
+            self.results_text = msg
+            Popup(title='Data Load Error',
+                  content=Label(text=msg),
+                  size_hint=(None, None), size=(400, 200)).open()
+            self.data_loaded = False
+            return
+        except Exception as e:
+            msg = f'Unexpected error loading nutrients data: {e}'
+            print(msg)
             self.results_text = msg
             Popup(title='Data Load Error',
                   content=Label(text=msg),
@@ -200,8 +218,12 @@ class NutrientCalculatorScreen(Screen):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception as e:
+            except (json.JSONDecodeError, OSError) as e:
                 self.results_text += f"\nFailed to read log file: {e}"
+                data = []
+            except Exception as e:
+                self.results_text += f"\nUnexpected error reading log file: {e}"
+                print(e)
                 data = []
         else:
             data = []
@@ -209,8 +231,11 @@ class NutrientCalculatorScreen(Screen):
         try:
             with open(log_path, 'w', encoding='utf-8') as fh:
                 json.dump(data, fh, indent=2)
-        except Exception as e:
+        except OSError as e:
             self.results_text += f"\nFailed to write log file: {e}"
+        except Exception as e:
+            self.results_text += f"\nUnexpected error writing log file: {e}"
+            print(e)
 
 
 class ScheduleLogScreen(Screen):
@@ -227,8 +252,12 @@ class ScheduleLogScreen(Screen):
             try:
                 with open(log_path, 'r', encoding='utf-8') as fh:
                     data = json.load(fh)
-            except Exception as e:
+            except (json.JSONDecodeError, OSError) as e:
                 self.status_text = f"Failed to read log: {e}"
+                data = []
+            except Exception as e:
+                self.status_text = f"Unexpected error reading log: {e}"
+                print(e)
                 data = []
         else:
             data = []
@@ -243,8 +272,11 @@ class ScheduleLogScreen(Screen):
         try:
             if os.path.exists(log_path):
                 os.remove(log_path)
-        except Exception as e:
+        except OSError as e:
             self.status_text = f"Failed to clear log: {e}"
+        except Exception as e:
+            self.status_text = f"Unexpected error clearing log: {e}"
+            print(e)
         self.load_log()
 
     def export_log(self):
@@ -254,8 +286,11 @@ class ScheduleLogScreen(Screen):
             export_path = os.path.join(app.user_data_dir, 'schedule_log_export.json')
             try:
                 shutil.copy(log_path, export_path)
-            except Exception as e:
+            except OSError as e:
                 self.status_text = f"Failed to export log: {e}"
+            except Exception as e:
+                self.status_text = f"Unexpected error exporting log: {e}"
+                print(e)
         else:
             self.status_text = 'No log file to export.'
 
