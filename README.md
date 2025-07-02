@@ -1,6 +1,6 @@
 # Garden Pip
 
-Garden Pip is a Kivy-based application providing tools for managing a small-scale hydroponic setup.  It currently includes a nutrient calculator and a basic problem search interface.  Additional features such as shelf layout planning and schedule logging will be added in the future.
+Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The core tools provide a nutrient calculator and a problem search.  Additional features such as shelf layout planning and schedule logging will be added in the future.
 
 ## Running on Raspberry Pi
 
@@ -16,15 +16,15 @@ Garden Pip is a Kivy-based application providing tools for managing a small-scal
    ```
 3. Install the required Python packages:
    ```bash
-   pip3 install -r requirements.txt  # installs kivy and kivymd
+   pip3 install -r requirements.txt  # installs the Textual framework
    ```
-   Material Design style widgets rely on the KivyMD package.
 4. Run the application:
    ```bash
-   python3 main.py
+   python3 pipboy.py
    ```
 
-The application opens a simple GUI window where the tools are accessible.
+The application opens a keyboard navigable interface styled like a Pip-Boy. Use
+the arrow keys to move between options and **Enter** to select.
 
 ## Features
 
@@ -45,6 +45,7 @@ The application opens a simple GUI window where the tools are accessible.
 3. Pick a plant category and unit system, then enter the desired solution volume.
 4. Optionally choose a Cal-Mag supplement and press **Calculate**.
 5. The calculated amounts appear below the button and the entry is added to the schedule log.
+6. Press **Esc** to return to the main menu at any time.
 
 ## Log files
 
