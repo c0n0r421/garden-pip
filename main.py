@@ -1,9 +1,22 @@
 # main.py
 #!/usr/bin/env python3
-import json, os
+import json
+import os
+import datetime as dt
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
+
+from gardenpip.db import (
+    ShelfSystem,
+    Shelf,
+    Tray,
+    add_nutrient_log,
+    delete_nutrient_log,
+    get_session,
+    search_nutrient_logs,
+    update_nutrient_log,
+)
 
 class MenuScreen(Screen):
     pass
@@ -97,6 +110,46 @@ class NutrientStageScreen(Screen):
         self.ids.result_lbl.text = '\n'.join(lines)
 
 
+class NutrientLogScreen(Screen):
+    def on_kv_post(self, base_widget):
+        here = os.path.dirname(__file__)
+        db_path = os.path.join(here, "gardenpip.db")
+        self.session = get_session(db_path)
+        self.refresh_logs()
+
+    def refresh_logs(self, query: str | None = None) -> None:
+        logs = search_nutrient_logs(self.session, query)
+        self.ids.log_list.data = [
+            {
+                "text": f"{log.date.date()} | Tray {log.tray_id} pH {log.ph} ppm {log.ppm} - {log.notes}",
+                "on_press": lambda log_id=log.id: self.edit_log(log_id),
+            }
+            for log in logs
+        ]
+
+    def on_search(self, text: str) -> None:
+        self.refresh_logs(text)
+
+    def add_log(self) -> None:
+        tray = self.session.query(Tray).first()
+        if not tray:
+            system = ShelfSystem(name="Default")
+            shelf = Shelf(label="S1", system=system)
+            tray = Tray(label="T1", shelf=shelf)
+            self.session.add(system)
+            self.session.commit()
+        add_nutrient_log(self.session, tray.id, ph=6.0, ppm=1000, notes="New entry")
+        self.refresh_logs()
+
+    def edit_log(self, log_id: int) -> None:
+        update_nutrient_log(self.session, log_id, notes="edited")
+        self.refresh_logs()
+
+    def delete_log(self, log_id: int) -> None:
+        delete_nutrient_log(self.session, log_id)
+        self.refresh_logs()
+
+
 class GardenPipApp(App):
     def build(self):
         Window.clearcolor = (0.07, 0.15, 0.07, 1)  # Pip-Boy dark green
@@ -108,6 +161,7 @@ class GardenPipApp(App):
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(NutrientSelectScreen(name='nutrient_select'))
         sm.add_widget(NutrientStageScreen(name='nutrient_stage'))
+        sm.add_widget(NutrientLogScreen(name='nutrient_log'))
         return sm
 
 if __name__ == '__main__':
