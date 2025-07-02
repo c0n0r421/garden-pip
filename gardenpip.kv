@@ -23,11 +23,20 @@
             on_press: root.manager.current = 'nutrient_select'
 
         Button:
+            text: '\U0001F4D6 Nutrient Log'
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+            on_press: root.manager.current = 'nutrient_log'
+
+        Button:
             text: '🗄 Shelf Layout'
             size_hint_y: None
             height: dp(60)
             font_size: '18sp'
             on_press: root.manager.current = 'shelf_layout'
+
+
 
 
 <NutrientSelectScreen>:
@@ -154,12 +163,53 @@
                 font_size: '18sp'
 
 
-<ShelfLayoutScreen>:
-    name: 'shelf_layout'
+
+<NutrientLogScreen>:
+    name: 'nutrient_log'
+    
     BoxLayout:
         orientation: 'vertical'
         padding: dp(20)
         spacing: dp(10)
+
+<ShelfLayoutScreen>:
+    name: 'shelf_layout'
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
+
+        TextInput:
+            id: search
+            hint_text: 'Search logs'
+            size_hint_y: None
+            height: dp(40)
+            on_text: root.on_search(self.text)
+
+        RecycleView:
+            id: log_list
+            viewclass: 'Button'
+            RecycleBoxLayout:
+                default_size: None, dp(40)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            spacing: dp(10)
+
+            Button:
+                text: 'Add'
+                on_press: root.add_log()
+
+            Button:
+                text: 'Back'
+                on_press: root.manager.current = 'menu'
 
         ScrollView:
             do_scroll_x: False
@@ -187,3 +237,4 @@
             size_hint_y: None
             height: dp(50)
             on_press: root.manager.current = 'menu'
+
