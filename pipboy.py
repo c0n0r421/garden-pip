@@ -10,6 +10,7 @@ from textual.widgets import (
     OptionList,
 )
 from textual.widgets.option_list import Option
+
 from textual.screen import Screen
 import os
 from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
@@ -43,6 +44,7 @@ class MenuScreen(Screen):
 class NutrientCalculatorScreen(Screen):
     BINDINGS = [("escape", "app.pop_screen", "Back")]
 
+
     def compose(self) -> ComposeResult:
         path = os.path.join(DATA_DIR, 'nutrients.json')
         self.data = load_nutrient_data(path)
@@ -67,6 +69,7 @@ class NutrientCalculatorScreen(Screen):
 
     def on_mount(self) -> None:
         self.query_one('#manu', Select).focus()
+
 
     def on_select_changed(self, event: Select.Changed) -> None:
         if event.select.id == "manu":
@@ -102,6 +105,7 @@ class NutrientCalculatorScreen(Screen):
 
 class ProblemSearchScreen(Screen):
     BINDINGS = [("escape", "app.pop_screen", "Back")]
+
 
     def compose(self) -> ComposeResult:
         path = os.path.join(DATA_DIR, 'hydroponicProblems.json')

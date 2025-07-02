@@ -23,8 +23,10 @@ Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The
    python3 pipboy.py
    ```
 
+
 The application opens a keyboard navigable interface styled like a Pip-Boy. Use
 the arrow keys to move between options and **Enter** to select.
+
 
 ## Features
 
