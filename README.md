@@ -23,9 +23,9 @@ Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The
    python3 pipboy.py
    ```
 
-
 The application opens a keyboard navigable interface styled like a Pip-Boy. Use
-the arrow keys to move between options and **Enter** to select.
+the arrow keys to move between options and **Enter** to select. Settings for the
+nutrient calculator can be saved and loaded from the **Manage Settings** menu.
 
 
 ## Features
@@ -46,8 +46,10 @@ the arrow keys to move between options and **Enter** to select.
 2. Select the nutrient manufacturer, series and growth stage.
 3. Pick a plant category and unit system, then enter the desired solution volume.
 4. Optionally choose a Cal-Mag supplement and press **Calculate**.
-5. The calculated amounts appear below the button and the entry is added to the schedule log.
-6. Press **Esc** to return to the main menu at any time.
+5. Use **Save Setting** to store the current selections or **Load Setting** to recall a saved one.
+6. The calculated amounts appear below the button and the entry is added to the schedule log.
+7. Press **Esc** to return to the main menu at any time.
+
 
 ## Log files
 

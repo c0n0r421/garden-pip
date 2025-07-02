@@ -15,8 +15,11 @@ from textual.screen import Screen
 import os
 from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
 from gardenpip.problem_logic import load_problem_data, search_problems
+from gardenpip.config_logic import load_configs, save_configs
 
 DATA_DIR = os.path.dirname(__file__)
+CONFIG_PATH = os.path.join(DATA_DIR, 'pipboy_config.json')
+
 
 class MenuScreen(Screen):
     def compose(self) -> ComposeResult:
@@ -25,6 +28,8 @@ class MenuScreen(Screen):
         yield OptionList(
             Option("Nutrient Calculator", id="calc"),
             Option("Problem Search", id="search"),
+            Option("Manage Settings", id="config"),
+
             Option("Exit", id="exit"),
             id="menu_options",
         )
@@ -38,12 +43,36 @@ class MenuScreen(Screen):
             self.app.push_screen(NutrientCalculatorScreen())
         elif event.option.id == "search":
             self.app.push_screen(ProblemSearchScreen())
+        elif event.option.id == "config":
+            self.app.push_screen(ConfigListScreen())
         elif event.option.id == "exit":
             self.app.exit()
 
-class NutrientCalculatorScreen(Screen):
+class ConfigListScreen(Screen):
     BINDINGS = [("escape", "app.pop_screen", "Back")]
 
+    def __init__(self, callback=None, **kwargs):
+        self.callback = callback
+        super().__init__(**kwargs)
+
+    def compose(self) -> ComposeResult:
+        data = load_configs(CONFIG_PATH)
+        opts = [Option(name, id=name) for name in data.keys()] or [Option("<none>", id="none")]
+        yield Header(show_clock=False)
+        yield Static("Saved Settings", id="title")
+        yield OptionList(*opts, id="cfg_list")
+        yield Footer()
+
+    def on_mount(self) -> None:
+        self.query_one(OptionList).focus()
+
+    def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
+        if event.option.id != "none" and self.callback:
+            self.callback(event.option.id)
+        self.app.pop_screen()
+
+class NutrientCalculatorScreen(Screen):
+    BINDINGS = [("escape", "app.pop_screen", "Back")]
 
     def compose(self) -> ComposeResult:
         path = os.path.join(DATA_DIR, 'nutrients.json')
@@ -61,6 +90,10 @@ class NutrientCalculatorScreen(Screen):
             Select(options=[('metric','metric'),('imperial','imperial')], value="metric", id="unit", prompt="Units"),
             Input(placeholder="Volume", id="volume", restrict=r'[0-9.]'),
             Select(options=[(c['product'], c['product']) for c in self.calmag], allow_blank=True, id="calmag", prompt="Cal-Mag"),
+            Input(placeholder="Setting name", id="cfgname"),
+            Button("Save Setting", id="save_cfg"),
+            Button("Load Setting", id="load_cfg"),
+
             Button("Calculate", id="do_calc"),
             Static(id="results"),
             id="calc_form"
@@ -102,6 +135,48 @@ class NutrientCalculatorScreen(Screen):
                 manu, series, stage, plant, unit, vol, calmag
             )
             self.query_one('#results', Static).update('\n'.join(lines))
+        elif event.button.id == "save_cfg":
+            name = self.query_one('#cfgname', Input).value.strip()
+            if not name:
+                self.query_one('#results', Static).update('Enter a setting name')
+                return
+            cfg = {
+                'manufacturer': self.query_one('#manu', Select).value,
+                'series': self.query_one('#series', Select).value,
+                'stage': self.query_one('#stage', Select).value,
+                'plant': self.query_one('#plant', Select).value,
+                'unit': self.query_one('#unit', Select).value,
+                'volume': self.query_one('#volume', Input).value,
+                'calmag': self.query_one('#calmag', Select).value,
+            }
+            data = load_configs(CONFIG_PATH)
+            data[name] = cfg
+            save_configs(CONFIG_PATH, data)
+            self.query_one('#results', Static).update(f'Saved setting {name}')
+        elif event.button.id == "load_cfg":
+            self.app.push_screen(ConfigListScreen(callback=self.apply_config))
+
+    def apply_config(self, cfg_name: str) -> None:
+        data = load_configs(CONFIG_PATH)
+        cfg = data.get(cfg_name)
+        if not cfg:
+            return
+        manu_select = self.query_one('#manu', Select)
+        manu_select.value = cfg.get('manufacturer')
+        item = next((d for d in self.nutrients if d['manufacturer'] == manu_select.value), None)
+        series_select = self.query_one('#series', Select)
+        stage_select = self.query_one('#stage', Select)
+        if item:
+            series_select.options = [(item['series'], item['series'])]
+            stage_select.options = [(s, s) for s in item['stages'].keys()]
+        series_select.value = cfg.get('series')
+        stage_select.value = cfg.get('stage')
+        self.query_one('#plant', Select).value = cfg.get('plant')
+        self.query_one('#unit', Select).value = cfg.get('unit')
+        self.query_one('#volume', Input).value = str(cfg.get('volume', ''))
+        self.query_one('#calmag', Select).value = cfg.get('calmag')
+        self.query_one('#cfgname', Input).value = cfg_name
+        self.query_one('#results', Static).update(f'Loaded setting {cfg_name}')
 
 class ProblemSearchScreen(Screen):
     BINDINGS = [("escape", "app.pop_screen", "Back")]
