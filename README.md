@@ -27,6 +27,7 @@ The application opens a keyboard navigable interface styled like a Pip-Boy. Use
 the arrow keys to move between options and **Enter** to select. Settings for the
 nutrient calculator can be saved and loaded from the **Manage Settings** menu.
 
+
 ## Features
 
 - **Nutrient calculator** – Calculate nutrient amounts based on manufacturer, series, growth stage, plant category, units, volume, and Cal-Mag supplement.  Results appear in the interface.
@@ -48,6 +49,7 @@ nutrient calculator can be saved and loaded from the **Manage Settings** menu.
 5. Use **Save Setting** to store the current selections or **Load Setting** to recall a saved one.
 6. The calculated amounts appear below the button and the entry is added to the schedule log.
 7. Press **Esc** to return to the main menu at any time.
+
 
 ## Log files
 
