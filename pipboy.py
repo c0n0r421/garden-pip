@@ -1,6 +1,16 @@
 from textual.app import App, ComposeResult
 from textual.containers import Vertical
-from textual.widgets import Header, Footer, Button, Static, Select, Input
+from textual.widgets import (
+    Header,
+    Footer,
+    Button,
+    Static,
+    Select,
+    Input,
+    OptionList,
+)
+from textual.widgets.option_list import Option
+
 from textual.screen import Screen
 import os
 from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
@@ -12,23 +22,29 @@ class MenuScreen(Screen):
     def compose(self) -> ComposeResult:
         yield Header(show_clock=False)
         yield Static("Garden PipBoy", id="title")
-        yield Vertical(
-            Button("Nutrient Calculator", id="calc"),
-            Button("Problem Search", id="search"),
-            Button("Exit", id="exit"),
-            id="menu_buttons"
+        yield OptionList(
+            Option("Nutrient Calculator", id="calc"),
+            Option("Problem Search", id="search"),
+            Option("Exit", id="exit"),
+            id="menu_options",
         )
         yield Footer()
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "calc":
+    def on_mount(self) -> None:
+        self.query_one(OptionList).focus()
+
+    def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
+        if event.option.id == "calc":
             self.app.push_screen(NutrientCalculatorScreen())
-        elif event.button.id == "search":
+        elif event.option.id == "search":
             self.app.push_screen(ProblemSearchScreen())
-        elif event.button.id == "exit":
+        elif event.option.id == "exit":
             self.app.exit()
 
 class NutrientCalculatorScreen(Screen):
+    BINDINGS = [("escape", "app.pop_screen", "Back")]
+
+
     def compose(self) -> ComposeResult:
         path = os.path.join(DATA_DIR, 'nutrients.json')
         self.data = load_nutrient_data(path)
@@ -50,6 +66,10 @@ class NutrientCalculatorScreen(Screen):
             id="calc_form"
         )
         yield Footer()
+
+    def on_mount(self) -> None:
+        self.query_one('#manu', Select).focus()
+
 
     def on_select_changed(self, event: Select.Changed) -> None:
         if event.select.id == "manu":
@@ -84,6 +104,9 @@ class NutrientCalculatorScreen(Screen):
             self.query_one('#results', Static).update('\n'.join(lines))
 
 class ProblemSearchScreen(Screen):
+    BINDINGS = [("escape", "app.pop_screen", "Back")]
+
+
     def compose(self) -> ComposeResult:
         path = os.path.join(DATA_DIR, 'hydroponicProblems.json')
         self.problems = load_problem_data(path)
@@ -105,6 +128,9 @@ class ProblemSearchScreen(Screen):
             id="search_form"
         )
         yield Footer()
+
+    def on_mount(self) -> None:
+        self.query_one('#plant', Select).focus()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "do_search":

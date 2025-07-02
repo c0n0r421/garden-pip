@@ -23,7 +23,10 @@ Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The
    python3 pipboy.py
    ```
 
-The application opens a keyboard navigable interface styled like a Pip-Boy.
+
+The application opens a keyboard navigable interface styled like a Pip-Boy. Use
+the arrow keys to move between options and **Enter** to select.
+
 
 ## Features
 
@@ -44,6 +47,7 @@ The application opens a keyboard navigable interface styled like a Pip-Boy.
 3. Pick a plant category and unit system, then enter the desired solution volume.
 4. Optionally choose a Cal-Mag supplement and press **Calculate**.
 5. The calculated amounts appear below the button and the entry is added to the schedule log.
+6. Press **Esc** to return to the main menu at any time.
 
 ## Log files
 

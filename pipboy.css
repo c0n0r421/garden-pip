@@ -9,7 +9,8 @@
     height: 3;
 }
 
-#menu_buttons, #calc_form, #search_form {
+#menu_options, #calc_form, #search_form {
+
     align: center top;
     padding: 1 2;
     width: 80%;
