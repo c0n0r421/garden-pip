@@ -16,11 +16,11 @@ Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The
    ```
 3. Install the required Python packages:
    ```bash
-   pip3 install -r requirements.txt  # installs the Textual framework
+   pip3 install -r requirements.txt  # installs the Kivy framework
    ```
 4. Run the application:
    ```bash
-   python3 pipboy.py
+   python3 main.py
    ```
 
 The application opens a keyboard navigable interface styled like a Pip-Boy. Use
