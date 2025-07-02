@@ -1,116 +1,115 @@
-# gardenpip_app.py
-
+# main.py
+#!/usr/bin/env python3
+import json, os
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.spinner import Spinner
-from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
-import json
+from kivy.uix.screenmanager import ScreenManager, Screen
 
-# Set retro Pip-Boy like colors
-Window.clearcolor = (0.07, 0.15, 0.07, 1)  # dark green background
+class MenuScreen(Screen):
+    pass
+
+class NutrientSelectScreen(Screen):
+    def on_kv_post(self, base_widget):
+        here = os.path.dirname(__file__)
+        with open(os.path.join(here, 'nutrients.json')) as f:
+            self.data = json.load(f)
+        # Populate main nutrients
+        self.ids.manufacturer.values = [m['manufacturer'] for m in self.data['nutrients']]
+        self.ids.series.values       = []
+        # Populate Cal-Mag supplements (add a “None” option)
+        self.ids.calmag.values = ['None'] + [s['product'] for s in self.data['cal_mag_supplements']]
+        self.ids.calmag.text   = 'None'
+
+    def on_manufacturer(self, text):
+        entry = next((m for m in self.data['nutrients'] if m['manufacturer']==text), None)
+        if entry:
+            self.ids.series.values = [entry['series']]
+            self.ids.series.text   = entry['series']
+
+    def do_next(self):
+        app = App.get_running_app()
+        app.selected_manufacturer = self.ids.manufacturer.text
+        app.selected_series       = self.ids.series.text
+        app.selected_calmag       = self.ids.calmag.text
+        self.manager.current      = 'nutrient_stage'
 
 
-class SplashScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+class NutrientStageScreen(Screen):
+    def on_pre_enter(self):
+        app = App.get_running_app()
+        here = os.path.dirname(__file__)
+        with open(os.path.join(here, 'nutrients.json')) as f:
+            data = json.load(f)
+        entry = next((m for m in data['nutrients']
+                      if m['manufacturer']==app.selected_manufacturer
+                      and m['series']==app.selected_series), None)
+        if entry:
+            stages = list(entry['stages'].keys())
+            self.ids.stage.values = stages
+            self.ids.stage.text   = stages[0]
+        # set up unit spinner & volume default
+        self.ids.unit.values   = ['metric', 'imperial']
+        self.ids.unit.text     = 'metric'
+        self.on_unit(self.ids.unit.text)
+        self.ids.result_lbl.text = ''
 
-        layout.add_widget(Label(text='[b]Garden Pip Tools[/b]', markup=True, font_size=32, color=(0.4, 1, 0.4, 1)))
+    def on_unit(self, unit):
+        # default volume 1 L or 1 gal
+        self.ids.volume.text     = '1'
+        self.ids.volume.hint_text = 'Volume (L)' if unit=='metric' else 'Volume (gal)'
 
-        nutrient_btn = Button(text='🌿 Nutrient Calculator', size_hint=(1, 0.2), background_color=(0, 0.6, 0, 1))
-        nutrient_btn.bind(on_press=lambda x: self.manager.current = 'nutrients')
-        layout.add_widget(nutrient_btn)
-
-        self.add_widget(layout)
-
-
-class NutrientCalculatorScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
-        self.data = self.load_nutrient_data()
-
-        self.manufacturer_spinner = Spinner(text='Select Manufacturer', values=list(self.data.keys()))
-        self.manufacturer_spinner.bind(text=self.update_series_spinner)
-
-        self.series_spinner = Spinner(text='Select Series')
-        self.stage_spinner = Spinner(text='Select Stage')
-        self.unit_spinner = Spinner(text='Select Unit', values=['metric', 'imperial'])
-        self.volume_input = TextInput(hint_text='Enter volume', multiline=False, input_filter='float')
-
-        self.result_label = Label(text='Results will appear here.', halign='left', valign='top')
-        self.result_label.bind(size=self.result_label.setter('text_size'))
-
-        calc_btn = Button(text='Calculate', background_color=(0, 0.5, 0, 1))
-        calc_btn.bind(on_press=self.calculate)
-
-        self.layout.add_widget(self.manufacturer_spinner)
-        self.layout.add_widget(self.series_spinner)
-        self.layout.add_widget(self.stage_spinner)
-        self.layout.add_widget(self.unit_spinner)
-        self.layout.add_widget(self.volume_input)
-        self.layout.add_widget(calc_btn)
-        self.layout.add_widget(self.result_label)
-
-        self.add_widget(self.layout)
-
-    def load_nutrient_data(self):
-        with open('nutrients.json') as f:
-            raw = json.load(f)
-        data = {}
-        for n in raw['nutrients']:
-            data.setdefault(n['manufacturer'], {})[n['series']] = n
-        return data
-
-    def update_series_spinner(self, spinner, text):
-        series_list = list(self.data[text].keys())
-        self.series_spinner.values = series_list
-        self.series_spinner.text = series_list[0]
-        self.update_stage_spinner()
-
-    def update_stage_spinner(self):
-        manufacturer = self.manufacturer_spinner.text
-        series = self.series_spinner.text
-        if manufacturer in self.data and series in self.data[manufacturer]:
-            stages = list(self.data[manufacturer][series]['stages'].keys())
-            self.stage_spinner.values = stages
-            self.stage_spinner.text = stages[0]
-
-    def calculate(self, instance):
+    def do_calc(self):
+        app  = App.get_running_app()
+        man  = app.selected_manufacturer
+        ser  = app.selected_series
+        stg  = self.ids.stage.text
+        unit = self.ids.unit.text
         try:
-            manufacturer = self.manufacturer_spinner.text
-            series = self.series_spinner.text
-            stage = self.stage_spinner.text
-            unit = self.unit_spinner.text
-            volume = float(self.volume_input.text)
+            vol = float(self.ids.volume.text)
+        except ValueError:
+            vol = 1.0
 
-            base_data = self.data[manufacturer][series]
-            stage_data = base_data['stages'][stage]
-            base_volume = base_data['base_unit'][unit]['volume']
+        here = os.path.dirname(__file__)
+        with open(os.path.join(here, 'nutrients.json')) as f:
+            data = json.load(f)
 
-            result_text = f'[b]Results for {manufacturer} - {series} ({stage})[/b]\n\n'
-            for nutrient in stage_data:
-                name = nutrient['name']
-                amount = nutrient['concentration'][unit] * volume / base_volume
-                unit_label = nutrient['unit'][unit]
-                result_text += f'{name}: {amount:.2f} {unit_label}\n'
+        # main nutrients
+        entry = next((m for m in data['nutrients']
+                      if m['manufacturer']==man and m['series']==ser), None)
+        lines = []
+        if entry:
+            base_vol = entry['base_unit'][unit]['volume']
+            lines.append(f"[b]{man} – {ser} – {stg}[/b]\n")
+            for comp in entry['stages'][stg]:
+                amt = comp['concentration'][unit] * (vol / base_vol)
+                lines.append(f"{comp['name']}: {amt:.1f} {comp['unit'][unit]}")
+        # Cal-Mag
+        supp = app.selected_calmag
+        if supp and supp != 'None':
+            supp_entry = next(s for s in data['cal_mag_supplements']
+                              if s['product']==supp)
+            base_vol_s = supp_entry['base_unit'][unit]['volume']
+            conc_s     = supp_entry['concentration'][unit]
+            amt_s      = conc_s * (vol / base_vol_s)
+            lines.append("\n[b]Supplement[/b]\n")
+            lines.append(f"{supp}: {amt_s:.1f} {supp_entry['unit']}")
 
-            self.result_label.text = result_text
-        except Exception as e:
-            self.result_label.text = f'Error: {str(e)}'
+        self.ids.result_lbl.text = '\n'.join(lines)
 
 
 class GardenPipApp(App):
     def build(self):
+        Window.clearcolor = (0.07, 0.15, 0.07, 1)  # Pip-Boy dark green
+        # init storage
+        self.selected_manufacturer = ''
+        self.selected_series       = ''
+        self.selected_calmag       = ''
         sm = ScreenManager()
-        sm.add_widget(SplashScreen(name='splash'))
-        sm.add_widget(NutrientCalculatorScreen(name='nutrients'))
+        sm.add_widget(MenuScreen(name='menu'))
+        sm.add_widget(NutrientSelectScreen(name='nutrient_select'))
+        sm.add_widget(NutrientStageScreen(name='nutrient_stage'))
         return sm
-
 
 if __name__ == '__main__':
     GardenPipApp().run()
+

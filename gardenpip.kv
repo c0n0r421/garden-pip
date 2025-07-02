@@ -1,198 +1,148 @@
-ScreenManager:
-    MenuScreen:
-    NutrientCalculatorScreen:
-    ProblemSearchScreen:
-    ShelfLayoutScreen:
+# gardenpip.kv
+#:import dp kivy.metrics.dp
 
 <MenuScreen>:
     name: 'menu'
-    MDBoxLayout:
+    BoxLayout:
         orientation: 'vertical'
-        MDTopAppBar:
-            title: 'Garden Pip'
-            elevation: 2
-        MDBoxLayout:
-            orientation: 'vertical'
-            padding: '40dp'
-            spacing: '20dp'
-            size_hint_y: None
-            height: self.minimum_height
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDRaisedButton:
-                text: '🌿 Nutrient Calculator'
-                size_hint: None, None
-                size: '250dp', '60dp'
-                pos_hint: {'center_x': 0.5}
-                on_release: app.sm.current = 'nutrient_calc'
-            MDRaisedButton:
-                text: '🔍 Hydroponic Problem Search'
-                size_hint: None, None
-                size: '250dp', '60dp'
-                pos_hint: {'center_x': 0.5}
-                on_release: app.sm.current = 'problem_search'
-            MDRaisedButton:
-                text: '\U0001F4DA Shelf Layout'
-                size_hint: None, None
-                size: '250dp', '60dp'
-                pos_hint: {'center_x': 0.5}
-                on_release: app.sm.current = 'shelf_layout'
+        padding: dp(20)
+        spacing: dp(20)
 
-<NutrientCalculatorScreen>:
-    name: 'nutrient_calc'
-    MDBoxLayout:
-        orientation: 'vertical'
-        MDTopAppBar:
-            title: 'Nutrient Calculator'
-            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 2
-        ScrollView:
-            MDGridLayout:
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                padding: 10
-                spacing: 10
-                MDDropDownItem:
-                    id: manufacturer
-                    text: 'Select Manufacturer'
-                    on_release: root.open_dropdown(self, root.manufacturers, root.on_manufacturer_select)
-                MDDropDownItem:
-                    id: series
-                    text: 'Select Series'
-                    on_release: root.open_dropdown(self, root.series)
-                MDDropDownItem:
-                    id: stage
-                    text: 'Select Stage'
-                    on_release: root.open_dropdown(self, root.stages)
-                MDDropDownItem:
-                    id: plant_category
-                    text: 'Select Plant Category'
-                    on_release: root.open_dropdown(self, root.plant_categories)
-                MDDropDownItem:
-                    id: unit
-                    text: 'metric'
-                    on_release: root.open_dropdown(self, root.units)
-                MDTextField:
-                    id: volume
-                    hint_text: 'Enter volume'
-                    input_filter: 'float'
-                MDDropDownItem:
-                    id: calmag
-                    text: 'Select Cal-Mag'
-                    on_release: root.open_dropdown(self, root.cal_mag_supplements)
-                MDRaisedButton:
-                    text: 'Calculate'
-                    size_hint_y: None
-                    height: 40
-                    on_release: root.calculate()
-                MDLabel:
-                    id: results
-                    text: root.results_text
-                    size_hint_y: None
-                    height: self.texture_size[1]
-
-<ShelfLayoutScreen>:
-    name: 'shelf_layout'
-    MDBoxLayout:
-        orientation: 'vertical'
-        MDTopAppBar:
-            title: 'Shelf Layout'
-            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 2
-        FloatLayout:
-            id: layout
-            size_hint_y: 0.9
-            canvas.before:
-                Color:
-                    rgba: 0.9, 0.9, 0.9, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-                Color:
-                    rgba: 0, 0, 0, 1
-                Rectangle:
-                    pos: self.x, self.y + self.height * 0.33
-                    size: self.width, 2
-                Rectangle:
-                    pos: self.x, self.y + self.height * 0.66
-                    size: self.width, 2
-        MDBoxLayout:
-            size_hint_y: 0.1
-            MDRaisedButton:
-                text: 'Add Plant'
-                on_release: root.add_plant_widget()
-
-<ProblemSearchScreen>:
-    name: 'problem_search'
-    MDBoxLayout:
-        orientation: 'vertical'
-        MDTopAppBar:
-            title: 'Problem Search'
-            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 2
-        ScrollView:
-            MDGridLayout:
-                cols: 1
-                size_hint_y: None
-                height: self.minimum_height
-                padding: 10
-                spacing: 10
-                MDDropDownItem:
-                    id: problem_plant
-                    text: 'Select Plant'
-                    on_release: root.open_dropdown(self, root.plant_options)
-                MDDropDownItem:
-                    id: problem_stage
-                    text: 'Select Growth Stage'
-                    on_release: root.open_dropdown(self, root.stage_options)
-                MDDropDownItem:
-                    id: problem_medium
-                    text: 'Select Grow Medium'
-                    on_release: root.open_dropdown(self, root.medium_options)
-                MDDropDownItem:
-                    id: problem_system
-                    text: '-- All Systems --'
-                    on_release: root.open_dropdown(self, root.system_options)
-                MDTextField:
-                    id: problem_description
-                    hint_text: 'Describe the issue...'
-                MDRaisedButton:
-                    text: 'Search'
-                    size_hint_y: None
-                    height: 40
-                    on_release: root.search()
-                MDLabel:
-                    id: problem_results
-                    text: ''
-                    size_hint_y: None
-                    height: self.texture_size[1]
-
-<ScheduleLogScreen>:
-    name: 'schedule_log'
-    MDBoxLayout:
-        orientation: 'vertical'
-        MDTopAppBar:
-            title: 'Schedule Log'
-            left_action_items: [["arrow-left", lambda x: setattr(app.sm, 'current', 'menu')]]
-            elevation: 2
-        MDLabel:
-            id: log_status
-            text: root.status_text
+        Label:
+            text: '[b]Garden Pip Tools[/b]'
+            markup: True
+            font_size: '32sp'
             size_hint_y: None
             height: self.texture_size[1]
-        RecycleView:
-            id: log_list
-            viewclass: 'MDLabel'
-            data: [{'text': e} for e in root.log_entries]
-        MDBoxLayout:
+
+        Button:
+            text: '🌿 Nutrient Calculator'
             size_hint_y: None
-            height: 40
-            MDRaisedButton:
-                text: 'Refresh'
-                on_release: root.load_log()
-            MDRaisedButton:
-                text: 'Export'
-                on_release: root.export_log()
-            MDRaisedButton:
-                text: 'Clear'
-                on_release: root.clear_log()
+            height: dp(60)
+            font_size: '18sp'
+            on_press: root.manager.current = 'nutrient_select'
+
+
+<NutrientSelectScreen>:
+    name: 'nutrient_select'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
+        Spinner:
+            id: manufacturer
+            text: 'Select Manufacturer'
+            values: []
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+            on_text: root.on_manufacturer(self.text)
+
+        Spinner:
+            id: series
+            text: 'Select Series'
+            values: []
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+
+        Spinner:
+            id: calmag
+            text: 'Select Cal-Mag'
+            values: []
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+
+        Button:
+            text: 'Next'
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+            on_press: root.do_next()
+
+        Button:
+            text: '← Back to Menu'
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+            on_press: root.manager.current = 'menu'
+
+
+<NutrientStageScreen>:
+    name: 'nutrient_stage'
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: dp(20)
+        spacing: dp(10)
+
+        # ── Left column (inputs & buttons) ───────────────────────────────
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.4
+            spacing: dp(10)
+
+            Spinner:
+                id: unit
+                text: 'metric'
+                values: []
+                size_hint_y: None
+                height: dp(60)
+                font_size: '18sp'
+                on_text: root.on_unit(self.text)
+
+            TextInput:
+                id: volume
+                text: ''
+                hint_text: 'Volume'
+                input_filter: 'float'
+                size_hint_y: None
+                height: dp(60)
+                font_size: '18sp'
+
+            Spinner:
+                id: stage
+                text: 'Select Stage'
+                values: []
+                size_hint_y: None
+                height: dp(60)
+                font_size: '18sp'
+
+            Button:
+                text: 'Calculate'
+                size_hint_y: None
+                height: dp(60)
+                font_size: '18sp'
+                on_press: root.do_calc()
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(60)
+                spacing: dp(10)
+
+                Button:
+                    text: '← Back'
+                    font_size: '18sp'
+                    on_press: root.manager.current = 'nutrient_select'
+
+                Button:
+                    text: 'Main Menu'
+                    font_size: '18sp'
+                    on_press: root.manager.current = 'menu'
+
+        # ── Right column (results) ───────────────────────────────────────
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.6
+            padding: dp(10)
+
+            Label:
+                id: result_lbl
+                text: ''
+                markup: True
+                valign: 'top'
+                text_size: self.width, None
+                size_hint_y: 1
+                font_size: '18sp'
+
