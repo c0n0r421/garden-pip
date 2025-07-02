@@ -10,15 +10,18 @@ from textual.widgets import (
     OptionList,
 )
 from textual.widgets.option_list import Option
+from textual import events
 
 from textual.screen import Screen
 import os
 from gardenpip.nutrient_logic import load_nutrient_data, calculate_nutrients
 from gardenpip.problem_logic import load_problem_data, search_problems
 from gardenpip.config_logic import load_configs, save_configs
+from gardenpip.schedule_log import log_schedule
 
 DATA_DIR = os.path.dirname(__file__)
 CONFIG_PATH = os.path.join(DATA_DIR, 'pipboy_config.json')
+LOG_DIR = os.path.join(DATA_DIR, 'data')
 
 
 class MenuScreen(Screen):
@@ -26,17 +29,25 @@ class MenuScreen(Screen):
         yield Header(show_clock=False)
         yield Static("Garden PipBoy", id="title")
         yield OptionList(
-            Option("Nutrient Calculator", id="calc"),
-            Option("Problem Search", id="search"),
-            Option("Manage Settings", id="config"),
-
-            Option("Exit", id="exit"),
+            Option("1. Nutrient Calculator", id="calc"),
+            Option("2. Problem Search", id="search"),
+            Option("3. Manage Settings", id="config"),
+            Option("4. Exit", id="exit"),
             id="menu_options",
         )
         yield Footer()
 
     def on_mount(self) -> None:
         self.query_one(OptionList).focus()
+
+    def on_key(self, event: events.Key) -> None:
+        if event.key.isdigit():
+            idx = int(event.key) - 1
+            opts = self.query_one(OptionList)
+            if 0 <= idx < len(opts.options):
+                opts.index = idx
+                opts.action_select()
+                event.stop()
 
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option.id == "calc":
@@ -57,7 +68,7 @@ class ConfigListScreen(Screen):
 
     def compose(self) -> ComposeResult:
         data = load_configs(CONFIG_PATH)
-        opts = [Option(name, id=name) for name in data.keys()] or [Option("<none>", id="none")]
+        opts = [Option(f"{i+1}. {name}", id=name) for i, name in enumerate(data.keys())] or [Option("<none>", id="none")]
         yield Header(show_clock=False)
         yield Static("Saved Settings", id="title")
         yield OptionList(*opts, id="cfg_list")
@@ -65,6 +76,15 @@ class ConfigListScreen(Screen):
 
     def on_mount(self) -> None:
         self.query_one(OptionList).focus()
+
+    def on_key(self, event: events.Key) -> None:
+        if event.key.isdigit():
+            idx = int(event.key) - 1
+            opts = self.query_one(OptionList)
+            if 0 <= idx < len(opts.options):
+                opts.index = idx
+                opts.action_select()
+                event.stop()
 
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option.id != "none" and self.callback:
@@ -103,6 +123,41 @@ class NutrientCalculatorScreen(Screen):
     def on_mount(self) -> None:
         self.query_one('#manu', Select).focus()
 
+    def perform_calculation(self) -> None:
+        manu = self.query_one('#manu', Select).value
+        series = self.query_one('#series', Select).value
+        stage = self.query_one('#stage', Select).value
+        plant = self.query_one('#plant', Select).value
+        unit = self.query_one('#unit', Select).value
+        volume = self.query_one('#volume', Input).value
+        calmag = self.query_one('#calmag', Select).value
+        try:
+            vol = float(volume)
+        except ValueError:
+            self.query_one('#results', Static).update("Enter valid volume")
+            return
+        lines = calculate_nutrients(
+            {
+                'nutrients': self.nutrients,
+                'cal_mag_supplements': self.calmag,
+                'plant_categories': self.data.get('plant_categories', {})
+            },
+            manu, series, stage, plant, unit, vol, calmag
+        )
+        self.query_one('#results', Static).update('\n'.join(lines))
+        entry = {
+            'date': 'n/a',
+            'manufacturer': manu,
+            'series': series,
+            'stage': stage,
+            'plant_category': plant,
+            'unit': unit,
+            'volume': vol,
+            'cal_mag': calmag,
+            'lines': lines,
+        }
+        log_schedule(entry, LOG_DIR)
+
 
     def on_select_changed(self, event: Select.Changed) -> None:
         if event.select.id == "manu":
@@ -114,27 +169,7 @@ class NutrientCalculatorScreen(Screen):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "do_calc":
-            manu = self.query_one('#manu', Select).value
-            series = self.query_one('#series', Select).value
-            stage = self.query_one('#stage', Select).value
-            plant = self.query_one('#plant', Select).value
-            unit = self.query_one('#unit', Select).value
-            volume = self.query_one('#volume', Input).value
-            calmag = self.query_one('#calmag', Select).value
-            try:
-                vol = float(volume)
-            except ValueError:
-                self.query_one('#results', Static).update("Enter valid volume")
-                return
-            lines = calculate_nutrients(
-                {
-                    'nutrients': self.nutrients,
-                    'cal_mag_supplements': self.calmag,
-                    'plant_categories': self.data.get('plant_categories', {})
-                },
-                manu, series, stage, plant, unit, vol, calmag
-            )
-            self.query_one('#results', Static).update('\n'.join(lines))
+            self.perform_calculation()
         elif event.button.id == "save_cfg":
             name = self.query_one('#cfgname', Input).value.strip()
             if not name:
@@ -155,6 +190,10 @@ class NutrientCalculatorScreen(Screen):
             self.query_one('#results', Static).update(f'Saved setting {name}')
         elif event.button.id == "load_cfg":
             self.app.push_screen(ConfigListScreen(callback=self.apply_config))
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        if event.input.id == "volume":
+            self.perform_calculation()
 
     def apply_config(self, cfg_name: str) -> None:
         data = load_configs(CONFIG_PATH)

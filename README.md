@@ -24,8 +24,9 @@ Garden Pip now offers a text based interface styled like a Fallout Pip-Boy.  The
    ```
 
 The application opens a keyboard navigable interface styled like a Pip-Boy. Use
-the arrow keys to move between options and **Enter** to select. Settings for the
-nutrient calculator can be saved and loaded from the **Manage Settings** menu.
+the arrow keys or press the number shown next to a choice and press **Enter** to
+select. Settings for the nutrient calculator can be saved and loaded from the
+**Manage Settings** menu.
 
 
 ## Features
@@ -53,5 +54,5 @@ nutrient calculator can be saved and loaded from the **Manage Settings** menu.
 
 ## Log files
 
-Schedule entries are written to `schedule_log.json` inside Kivy's user data directory (typically `~/.local/share/gardenpip/` on Linux).  The schedule log screen lets you view, export or clear this file.  Logging is experimental and may change in future versions.
+Schedule entries are written to `data/schedule_log.json` inside the application directory. Logging is experimental and may change in future versions.
 
