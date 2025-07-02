@@ -1,11 +1,21 @@
 # main.py
 #!/usr/bin/env python3
+
 import json
 import os
 import datetime as dt
+
+import json, os
+from datetime import date
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from gardenpip.schedule_log import log_schedule
+from gardenpip.shelf_logic import get_system_layout, save_system_layout
 
 from gardenpip.db import (
     ShelfSystem,
@@ -109,6 +119,63 @@ class NutrientStageScreen(Screen):
 
         self.ids.result_lbl.text = '\n'.join(lines)
 
+        # log the schedule with shelf/tray info
+        log_entry = {
+            'date': date.today().isoformat(),
+            'manufacturer': man,
+            'series': ser,
+            'stage': stg,
+            'plant_category': '',
+            'unit': unit,
+            'volume': vol,
+            'cal_mag': supp if supp != 'None' else None,
+            'lines': lines,
+        }
+        data_dir = os.path.join(os.path.dirname(__file__), 'data')
+        log_schedule(log_entry, data_dir)
+
+
+class ShelfLayoutScreen(Screen):
+    def on_pre_enter(self):
+        self.refresh()
+
+    def refresh(self):
+        layout = get_system_layout()
+        box = self.ids.shelf_box
+        box.clear_widgets()
+        if not layout:
+            self.add_shelf()
+        else:
+            for shelf in layout:
+                name = shelf.get('name', '')
+                label = shelf.get('trays', [{}])[0].get('label', '')
+                self._add_row(name, label)
+
+    def _add_row(self, shelf_name='', tray_label=''):
+        row = BoxLayout(size_hint_y=None, height=40)
+        name_input = TextInput(text=shelf_name)
+        tray_input = TextInput(text=tray_label)
+        btn = Button(text='Remove', size_hint_x=None, width=80)
+        btn.bind(on_press=lambda *_: self.remove_shelf(row))
+        row.add_widget(name_input)
+        row.add_widget(tray_input)
+        row.add_widget(btn)
+        self.ids.shelf_box.add_widget(row)
+
+    def add_shelf(self):
+        self._add_row()
+
+    def remove_shelf(self, row):
+        self.ids.shelf_box.remove_widget(row)
+
+    def save_layout(self):
+        data = []
+        for row in self.ids.shelf_box.children[::-1]:
+            name_input = row.children[2]
+            tray_input = row.children[1]
+            data.append({'name': name_input.text, 'trays': [{'label': tray_input.text}]})
+        save_system_layout('default', data)
+
 
 class NutrientLogScreen(Screen):
     def on_kv_post(self, base_widget):
@@ -161,7 +228,11 @@ class GardenPipApp(App):
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(NutrientSelectScreen(name='nutrient_select'))
         sm.add_widget(NutrientStageScreen(name='nutrient_stage'))
+
         sm.add_widget(NutrientLogScreen(name='nutrient_log'))
+
+        sm.add_widget(ShelfLayoutScreen(name='shelf_layout'))
+
         return sm
 
 if __name__ == '__main__':

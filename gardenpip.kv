@@ -29,6 +29,15 @@
             font_size: '18sp'
             on_press: root.manager.current = 'nutrient_log'
 
+        Button:
+            text: '🗄 Shelf Layout'
+            size_hint_y: None
+            height: dp(60)
+            font_size: '18sp'
+            on_press: root.manager.current = 'shelf_layout'
+
+
+
 
 <NutrientSelectScreen>:
     name: 'nutrient_select'
@@ -154,12 +163,23 @@
                 font_size: '18sp'
 
 
+
 <NutrientLogScreen>:
     name: 'nutrient_log'
+    
     BoxLayout:
         orientation: 'vertical'
         padding: dp(20)
         spacing: dp(10)
+
+<ShelfLayoutScreen>:
+    name: 'shelf_layout'
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
 
         TextInput:
             id: search
@@ -190,4 +210,31 @@
             Button:
                 text: 'Back'
                 on_press: root.manager.current = 'menu'
+
+        ScrollView:
+            do_scroll_x: False
+            BoxLayout:
+                id: shelf_box
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+
+        Button:
+            text: 'Add Shelf'
+            size_hint_y: None
+            height: dp(50)
+            on_press: root.add_shelf()
+
+        Button:
+            text: 'Save Layout'
+            size_hint_y: None
+            height: dp(50)
+            on_press: root.save_layout()
+
+        Button:
+            text: '\u2190 Back'
+            size_hint_y: None
+            height: dp(50)
+            on_press: root.manager.current = 'menu'
 
