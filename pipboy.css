@@ -1,0 +1,25 @@
+* {
+    background: black;
+    color: #00ff5f;
+}
+
+#title {
+    text-style: bold;
+    align: center middle;
+    height: 3;
+}
+
+#menu_buttons, #calc_form, #search_form {
+    align: center top;
+    padding: 1 2;
+    width: 80%;
+}
+
+Button {
+    margin: 1;
+}
+
+Static#results {
+    height: auto;
+    padding: 1 0;
+}
