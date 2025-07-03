@@ -166,20 +166,11 @@
 
 <NutrientLogScreen>:
     name: 'nutrient_log'
-    
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(20)
-        spacing: dp(10)
-
-<ShelfLayoutScreen>:
-    name: 'shelf_layout'
 
     BoxLayout:
         orientation: 'vertical'
         padding: dp(20)
         spacing: dp(10)
-
 
         TextInput:
             id: search
@@ -210,6 +201,14 @@
             Button:
                 text: 'Back'
                 on_press: root.manager.current = 'menu'
+
+<ShelfLayoutScreen>:
+    name: 'shelf_layout'
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
 
         ScrollView:
             do_scroll_x: False
