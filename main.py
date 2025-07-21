@@ -4,18 +4,21 @@
 import json
 import os
 import datetime as dt
-
-import json, os
 from datetime import date
 
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.widget import Widget
+from kivy.graphics import Color, Rectangle
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from gardenpip.schedule_log import log_schedule
 from gardenpip.shelf_logic import get_system_layout, save_system_layout
+from gardenpip.config_logic import load_configs, save_configs, get_screensaver_timeout
 
 from gardenpip.db import (
     ShelfSystem,
@@ -30,6 +33,21 @@ from gardenpip.db import (
 
 class MenuScreen(Screen):
     pass
+
+
+class ScreensaverOverlay(Widget):
+    """Simple black widget used as a screensaver overlay."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        with self.canvas:
+            Color(0, 0, 0, 1)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
+        self.bind(size=self._update_rect, pos=self._update_rect)
+
+    def _update_rect(self, *args) -> None:
+        self.rect.pos = self.pos
+        self.rect.size = self.size
 
 class NutrientSelectScreen(Screen):
     def on_kv_post(self, base_widget):
@@ -220,20 +238,56 @@ class NutrientLogScreen(Screen):
 class GardenPipApp(App):
     def build(self):
         Window.clearcolor = (0.07, 0.15, 0.07, 1)  # Pip-Boy dark green
-        # init storage
+
+        # load configuration
+        here = os.path.dirname(__file__)
+        self.config_path = os.path.join(here, "config.json")
+        self.config = load_configs(self.config_path)
+        self.screensaver_timeout = get_screensaver_timeout(self.config)
+        if "screensaver_timeout" not in self.config:
+            save_configs(self.config_path, self.config)
+
+        # idle timer and overlay
+        self.last_interaction = dt.datetime.now()
+        Window.bind(on_touch_down=self._on_activity, on_key_down=self._on_activity)
+        Clock.schedule_interval(self._check_idle, 1)
+
         self.selected_manufacturer = ''
-        self.selected_series       = ''
-        self.selected_calmag       = ''
+        self.selected_series = ''
+        self.selected_calmag = ''
+
+        root = FloatLayout()
         sm = ScreenManager()
+        self.screen_manager = sm
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(NutrientSelectScreen(name='nutrient_select'))
         sm.add_widget(NutrientStageScreen(name='nutrient_stage'))
-
         sm.add_widget(NutrientLogScreen(name='nutrient_log'))
-
         sm.add_widget(ShelfLayoutScreen(name='shelf_layout'))
 
-        return sm
+        root.add_widget(sm)
+        self.screensaver = ScreensaverOverlay(size_hint=(1, 1), opacity=0)
+        root.add_widget(self.screensaver)
+        return root
+
+    # ── idle timer helpers ────────────────────────────────────────────
+
+    def _on_activity(self, *args):
+        """Reset idle timer on any user input."""
+        self.last_interaction = dt.datetime.now()
+        if self.screensaver.opacity > 0:
+            self.screensaver.opacity = 0
+        return False
+
+    def _check_idle(self, *_dt):
+        if self.screensaver_timeout <= 0:
+            return
+        if (
+            self.screensaver.opacity == 0
+            and (dt.datetime.now() - self.last_interaction).total_seconds()
+            >= self.screensaver_timeout
+        ):
+            self.screensaver.opacity = 1
 
 if __name__ == '__main__':
     GardenPipApp().run()
