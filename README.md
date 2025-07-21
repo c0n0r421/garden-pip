@@ -45,7 +45,9 @@ select. Settings for the nutrient calculator can be saved and loaded from the
 
 1. From the menu choose **Nutrient Calculator**.
 2. Select the nutrient manufacturer, series and growth stage.
-3. Pick a plant category and unit system, then enter the desired solution volume.
+3. Pick a plant category and unit system, then tap the volume field. A numeric
+   keypad opens allowing entry of the desired solution volume. Press **Enter** on
+   the keypad to hide it.
 4. Optionally choose a Cal-Mag supplement and press **Calculate**.
 5. Use **Save Setting** to store the current selections or **Load Setting** to recall a saved one.
 6. The calculated amounts appear below the button and the entry is added to the schedule log.

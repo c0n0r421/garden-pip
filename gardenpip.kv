@@ -1,6 +1,57 @@
 # gardenpip.kv
 #:import dp kivy.metrics.dp
 
+<Numpad>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            cols: 3
+            rows: 4
+            spacing: dp(5)
+            size_hint_y: None
+            height: self.minimum_height
+            Button:
+                text: '7'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '8'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '9'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '4'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '5'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '6'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '1'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '2'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '3'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '.'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '0'
+                on_press: root.key_press(self.text)
+            Button:
+                text: '\u2190'
+                on_press: root.key_press(self.text)
+        Button:
+            text: 'Enter'
+            size_hint_y: None
+            height: dp(60)
+            on_press: root.key_press(self.text)
+
 <MenuScreen>:
     name: 'menu'
     BoxLayout:
@@ -113,6 +164,7 @@
                 text: ''
                 hint_text: 'Volume'
                 input_filter: 'float'
+                on_focus: root.open_numpad(self) if args[1] else None
                 size_hint_y: None
                 height: dp(60)
                 font_size: '18sp'
