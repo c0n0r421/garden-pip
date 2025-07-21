@@ -14,6 +14,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from gardenpip.numpad import Numpad
 from gardenpip.schedule_log import log_schedule
 from gardenpip.shelf_logic import get_system_layout, save_system_layout
 
@@ -58,6 +59,14 @@ class NutrientSelectScreen(Screen):
 
 
 class NutrientStageScreen(Screen):
+    _numpad = None
+
+    def open_numpad(self, textinput):
+        if self._numpad is None:
+            self._numpad = Numpad()
+        self._numpad.target = textinput
+        self._numpad.open()
+
     def on_pre_enter(self):
         app = App.get_running_app()
         here = os.path.dirname(__file__)
